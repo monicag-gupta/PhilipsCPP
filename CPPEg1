@@ -125,7 +125,57 @@ int main () {
 
 
 
+#include <iostream>
+using namespace std;
+int main () {
+   char grade = 'D';
+   cout<<"Enter grade in Capital Alphabet:";
+   cin>>grade;
+   switch(grade) {
+      case 'A' :
+         cout << "Excellent!" << endl;
+         break;
+      case 'B' :
+      case 'C' :
+         cout << "Well done" << endl;
+         break;
+      case 'D' :
+         cout << "You passed" << endl;
+         break;
+      case 'F' :
+         cout << "Better try again" << endl;
+         break;
+      default :
+         cout << "Invalid grade" << endl;
+   }
+   cout << "Your grade is " << grade << endl;
+   return 0;
+}
 
+
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+int main()
+{
+ineligible:
+      cout<<"You are not eligible to vote!\n";
+      cout<<"Enter your age:\n";
+      int age;
+      cin>>age;
+      if (age < 18){
+              goto ineligible;
+      }
+      else
+      {
+              cout<<"You are eligible to vote!";
+      }
+}
 
 
 
