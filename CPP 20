@@ -107,6 +107,92 @@ std::cout << std::format("Value: {:.2f}", 3.1415);  // Value: 3.14
 
 
 
+1. auto Type Deduction (C++11+)
+Eliminates the need to specify types explicitly.
+auto x = 42;               // int
+auto y = 3.14;             // double
+auto name = std::string("Alice");
+Useful for long or complex types like iterators or lambdas:
+std::vector<int> nums{1, 2, 3};
+for (auto it = nums.begin(); it != nums.end(); ++it)
+    std::cout << *it << " ";
+2. nullptr (C++11+)
+Replaces the old NULL macro with a type-safe null pointer constant.
+int* ptr = nullptr; // safer than NULL
+3. Strongly-Typed enum class (C++11+)
+Improved enums with better scoping and type safety.
+enum class Color { Red, Green, Blue };
+Color c = Color::Green;
+// Old C-style enums could be implicitly converted to int.
+
+4. Range-Based for Loop (C++11+)
+Cleaner iteration over containers.
+std::vector<int> vec = {1, 2, 3, 4};
+for (int value : vec) {
+    std::cout << value << " ";
+}
+With reference for modifying elements:
+for (int& value : vec) {
+    value *= 2;
+}
+5. Smart Pointers (C++11+)
+Automatic memory management using RAII (no need to manually delete).
+std::unique_ptr – exclusive ownership
+#include <memory>
+auto ptr = std::make_unique<int>(10);
+std::shared_ptr – shared ownership
+#include <memory>
+auto ptr1 = std::make_shared<int>(42);
+auto ptr2 = ptr1; // ref count increases
+std::weak_ptr – non-owning reference to a shared resource
+Used to avoid cyclic references. 
+
+
+5. enum class
+Rationale: Prevent naming collisions and implicit conversions of enums to int.
+Impact:
+enum class Color { Red, Green };
+Color c = Color::Red; // No confusion with other enums or ints
+6. Lambda Expressions
+Rationale: Functions as first-class citizens, easy inline function definitions.
+Impact:
+std::vector<int> v{1, 2, 3};
+std::for_each(v.begin(), v.end(), [](int x){ std::cout << x << " "; });
+7. Move Semantics and std::move
+Rationale: Avoid expensive deep copies; enable resource transfer.
+Impact:
+std::string s = "Hello";
+std::string t = std::move(s); // Moves data; no deep copy
+
+
+Type Inference and Templates (decltype, constexpr, template <auto> in C++17+)
+Rationale: Reduce boilerplate and increase expressiveness in generic code.
+Impact:
+template <auto N>
+void printN() { std::cout << N; }
+printN<5>(); // Works with any literal (int, char, etc.)
+9. Standard Threading and Concurrency
+Rationale: Native threading support simplifies concurrent programming.
+Impact:
+std::thread t([]{ std::cout << "In thread\n"; });
+t.join();
+10. Modules, Concepts, and Coroutines (C++20)
+Rationale:
+Modules: Speed up compilation and improve encapsulation.
+Concepts: Cleaner constraints for templates.
+Coroutines: Simplify asynchronous programming.
+Impact:
+// Concept example
+template <typename T>
+requires std::integral<T>
+T addOne(T x) { return x + 1; }
+
+
+
+
+
+
+
 
 
 
