@@ -180,6 +180,146 @@ ineligible:
 
 
 
+#include <iostream>
+using namespace std;
+int main()
+{
+  int n, i, m=0, flag=0;
+  cout << "Enter the Number to check Prime: ";
+  cin >> n;
+  m=n/2;
+  for(i = 2; i <= m; i++)
+  {
+      if(n % i == 0)
+      {
+          cout<<"Number is not Prime."<<endl;
+          flag=1;
+          break;
+      }
+  }
+  if (flag==0)
+      cout << "Number is Prime."<<endl;
+  return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+int main()
+{
+  int n, i, m=0, flag=0;
+  cout << "Enter the Number to check Prime: ";
+  cin >> n;
+  m=n/2;
+  i=2;
+  while(i <= m)
+  {
+      if(n % i == 0)
+      {
+          cout<<"Number is not Prime."<<endl;
+          flag=1;
+          break;
+      }
+      i++;
+  }
+  if (flag==0)
+      cout << "Number is Prime."<<endl;
+  return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+int main()
+{
+  int n, i, m=0, flag=0;
+  cout << "Enter the Number to check Prime: ";
+  cin >> n;
+  m=n/2;
+  i=2;
+  do
+  {
+      if(n % i == 0)
+      {
+          cout<<"Number is not Prime."<<endl;
+          flag=1;
+          break;
+      }
+      i++;
+  }while(i <= m);
+  if (flag==0)
+      cout << "Number is Prime."<<endl;
+  return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+
+int main () {
+   // Local variable declaration:
+   int a = 10;
+
+   // do loop execution
+   do {
+      if( a == 15) {
+         // skip the iteration.
+         a = a + 1;
+         continue;
+      }
+      cout << "value of a: " << a << endl;
+      a = a + 1;
+   }
+   while( a < 20 );
+
+   return 0;
+}
+
+
+
+
+
+
+
+A loop becomes an infinite loop if a condition never becomes false
+You can terminate an infinite loop by pressing Ctrl + C keys
+#include <stdio.h>
+int main () {
+for( ; ; ) {
+printf("This loop will run forever.\n");
+}
+/*while(true) {
+printf("This loop will run forever.\n");
+}
+do
+{
+printf("This loop will run forever.\n");
+} while(true);  */
+
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
