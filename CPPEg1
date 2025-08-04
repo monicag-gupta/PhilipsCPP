@@ -475,6 +475,105 @@ int main() {
 
 
 
+The <chrono> header introduces a powerful, type-safe way to deal with durations, clocks, and time points.
+Common Clocks
+system_clock: Wall-clock time (can be converted to time_t).
+steady_clock: Monotonic clock (never goes backward).
+high_resolution_clock: Alias to the most precise clock (may be system or steady).
+
+
+
+
+
+
+
+
+Types Introduced:
+std::chrono::year
+std::chrono::month
+std::chrono::day
+std::chrono::weekday
+std::chrono::year_month_day
+All support arithmetic, comparisons, and construction with / operator.
+zoned_time requires a time zone database (usually part of your stdlib implementation like libc++ or MSVC STL with support enabled).
+
+
+
+
+
+#include <iostream>
+#include <chrono>
+#include <format>      // For std::format (C++20)
+#include <thread>      // For std::this_thread::sleep_for
+using namespace std;
+using namespace std::chrono;
+
+int main() {
+    // 1. Measure execution time
+    auto start = high_resolution_clock::now();
+
+    this_thread::sleep_for(milliseconds(1234)); // simulate work
+
+    auto end = high_resolution_clock::now();
+    auto elapsed = duration_cast<milliseconds>(end - start);
+    cout << "Elapsed time: " << elapsed.count() << " ms\n\n";
+
+    // 2. Use chrono literals
+    auto duration1 = 2h + 30min + 15s;
+    cout << "Duration1 in seconds: " << duration_cast<seconds>(duration1).count() << " seconds\n\n";
+
+    // 3. Get current system time and convert to time_t (legacy interop)
+    auto now = system_clock::now();
+    time_t legacy_time = system_clock::to_time_t(now);
+
+    // Safe replacement for ctime()
+    char buffer[26];
+    ctime_s(buffer, sizeof(buffer), &legacy_time);
+    cout << "Legacy time (ctime): " << buffer << endl;
+
+    // 4. Calendar types (C++20)
+    auto today = floor<days>(system_clock::now());
+    year_month_day ymd = year_month_day{ today };
+
+    cout << "Today (calendar): "
+        << static_cast<int>(ymd.year()) << "-"
+        << static_cast<unsigned>(ymd.month()) << "-"
+        << static_cast<unsigned>(ymd.day()) << "\n\n";
+
+    // 5. Custom date
+    year_month_day birthday = 1995y / October / 12d;
+    cout << "Birthday (raw): "
+        << static_cast<int>(birthday.year()) << "-"
+        << static_cast<unsigned>(birthday.month()) << "-"
+        << static_cast<unsigned>(birthday.day()) << "\n\n";
+
+    // 6. Weekday and arithmetic
+    weekday wd = weekday{ today };
+    cout << "Today is: " << wd.c_encoding() << " (0 = Sunday, 1 = Monday...)\n\n";
+
+    // 7. Formatting date/time (C++20)
+    cout << format("Formatted now: {:%Y-%m-%d %H:%M:%S}\n\n", floor<seconds>(now));
+
+    // 8. Time zone aware time (C++20)
+    try {
+        zoned_time localTime{ current_zone(), system_clock::now() };
+        cout << format("Local time with zone: {:%Y-%m-%d %H:%M:%S %Z}\n\n", localTime);
+
+        zoned_time utcTime{ "UTC", system_clock::now() };
+        cout << format("UTC time: {:%Y-%m-%d %H:%M:%S %Z}\n\n", utcTime);
+    }
+    catch (const std::exception& ex) {
+        cout << "Time zone error: " << ex.what() << endl;
+    }
+
+    // 9. Custom duration
+    duration<int, ratio<90 * 60>> match_duration(1); // 90 minutes
+    cout << "Match duration in seconds: " << duration_cast<seconds>(match_duration).count() << " sec\n";
+
+    return 0;
+}
+
+
 
 
 
