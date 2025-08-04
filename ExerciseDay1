@@ -1,0 +1,39 @@
+Exercise: Employee Management System (Console-Based) using Modern C++:
+
+Objective:
+Design a simple employee management system in modern C++ that demonstrates the use of:
+auto type deduction (NA)
+nullptr (NA)
+enum class (NA)
+range-based for loop
+smart pointers (NA)
+lambda expressions (NA)
+move semantics (NA)
+
+
+Step 1: Define a Department using enum class
+Use enum class Department { HR, Finance, Engineering, Marketing };
+Use enum Now
+
+Step 2: Create an Employee class
+Attributes: ID, Name, Department, Salary
+Add constructor, getters, and a print() method
+
+
+Step 3: Store Employees in a vector using smart pointers
+Use std::unique_ptr<Employee>
+(NA)
+(Create a Vector for the Employees)
+
+Step 4: Populate the vector using std::make_unique<>
+(NA)
+(Add a few employees to the system)
+
+Step 5: Display all employees using range-based for and auto
+
+Step 6: Use lambda to sort employees by salary (NA)
+Step 7: Demonstrate move semantics:
+Move an employee from one list to another (NA)
+
+
+
