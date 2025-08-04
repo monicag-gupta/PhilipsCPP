@@ -319,6 +319,113 @@ return 0;
 
 
 
+#include <iostream>
+using namespace std;
+int max(int num1, int num2); /* function declaration */
+int main () {
+int a = 100, b = 200, ret; /* local variable definition */
+ret = max(a, b); /* calling a function to get max value */
+cout<< "Max value is : "<< ret<<endl; //o/p: Max value is : 200
+return 0;
+}
+/* function returning the max between two numbers */
+int max(int num1, int num2) {
+int result; /* local variable declaration */
+if (num1 > num2)
+result = num1;
+else
+result = num2;
+return result;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std; 
+int sum(int a, int b = 20) {
+   int result;
+   result = a + b;
+   return (result);
+}
+int main () {
+   int a = 100;
+   int b = 200;
+   int result;
+ 
+   // calling a function to add the values.
+   result = sum(a, b);
+   cout << "Total value is :" << result << endl;
+
+   // calling a function again as follows.
+   result = sum(a);
+   cout << "Total value is :" << result << endl;
+ 
+   return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+int main()
+{
+ int arr[5]={10, 0, 20, 0, 30}; //creating and initializing array
+        //traversing array
+       for (int i: arr)        {
+            cout<<i<<"\n";
+        }
+      /* for(int j=0;j<arr.size();j++) {
+ 		i=arr[j];
+ 		cout<<i<<"\n";
+ 	}  */
+
+}
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+string str1 = "Hello";
+string str2 = "World";
+string str3;
+int  len;
+// copy str1 into str3
+str3 = str1;
+cout << "str3 : " << str3 << endl;
+// concatenates str1 and str2
+str3 = str1 + str2;
+cout << "str3 = str1 + str2 : " << str3 << endl;
+// total length of str3 after concatenation
+len = str3.size();
+cout << "str3.size() :  " << len << endl;
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
