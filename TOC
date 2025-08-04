@@ -1,0 +1,75 @@
+Advanced C++ Training Program
+ 
+Contents
+1. Introduction to C++11 and Beyond  
+2. Dynamic Memory Management        
+3. STL Associative Containers & Algorithms     
+4. Design Patterns and Best Practices 
+5. Concurrency and Parallelism            
+7. Optimizing Code Performance          
+8. Advanced Language Features
+ 
+ 
+1. Introduction to C++11 and Beyond
+Evolution of C++: from C++98 to C++20
+Modern syntax and language improvements
+Smart pointers, auto, nullptr, range-based for, enum class
+Lambda expressions and move semantics
+Rationale behind changes and their real-world impact
+2. Dynamic Memory Management
+Heap vs Stack allocation
+Manual memory management pitfalls
+RAII (Resource Acquisition Is Initialization)
+Smart pointers (std::uniqueptr, std::sharedptr, std::weak_ptr)
+Custom deleters and ownership semantics
+3. STL Associative Containers & Algorithms
+Overview of STL architecture
+Associative containers: map, unorderedmap, set, multimap, unorderedset
+Iterators, predicates, function objects
+Using std::algorithm: find_if, sort, transform, accumulate, etc.
+Performance trade-offs and container selection guidelines
+4. Design Patterns and Best Practices
+Core OO patterns in C++: Strategy, Observer, Factory, Singleton, Visitor
+SOLID principles applied in modern C++
+Dependency injection, policy-based design, interface segregation
+Avoiding anti-patterns in C++
+Industry Best Practices: Writing clean and maintainable code, adhering to coding standards.
+Exception Handling: Best practices for using exceptions and error handling in C++.
+5. Concurrency and Parallelism
+Thread management with std::thread
+Mutexes, condition variables, locks (std::mutex, std::lockguard, std::uniquelock)
+Thread-safe data sharing
+Task-based concurrency: std::async, std::future, std::promise
+6. Templates and Metaprogramming
+Template basics: function, class, and variadic templates
+SFINAE, decltype, auto, and type traits - Substitution Failure Is Not An Error
+constexpr and compile-time computation
+Modern alternatives: Concepts, type deduction
+7. Optimizing Code Performance
+Identifying performance bottlenecks
+Value vs reference semantics, copy elision, move semantics
+Inlining, loop unrolling, memory alignment
+Cache-awareness and memory access patterns
+Compiler optimization flags and profiling
+8. Advanced Language Features
+Rvalue references and move semantics in depth
+decltype, noexcept, override, final, explicit
+Lambda captures and closures
+Coroutines
+Modules
+Structured bindings and deconstruction
+9. Linking and Binary Structure
+Lib vs DLL: Differences and use-cases
+Compiling/Loading/Linking Static Libraries (LIB)
+Compiling/Loading/Linking Dynamic Libraries (DLL)
+Best practices for cross-platform binary compatibility
+ 
+Also, following are the list of tools we use –
+•	C++ 20
+•	VS 2022
+•	Cmake + Ninja
+•	Conan and Nuget
+•	Win 10/11
+•	Alma Linux
+•	GTest and GMock 
+•	ReSharper, TICS, SonarQube
