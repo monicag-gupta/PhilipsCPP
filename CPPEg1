@@ -418,6 +418,60 @@ return 0;
 
 
 
+The C++ standard library does not provide a proper date type. C++ inherits the structs and functions for date and time manipulation from C. 
+There are four time-related types: clock_t, time_t, size_t, and tm.
+Functions:
+time_t time(time_t *time);
+This returns the current calendar time of the system in number of seconds elapsed since January 1, 1970. If the system has no time, .1 is returned.
+char *ctime(const time_t *time);
+This returns a pointer to a string of the form day month year hours:minutes:seconds year\n\0.
+struct tm *localtime(const time_t *time);
+This returns a pointer to the tm structure representing local time.
+clock_t clock(void);
+This returns a value that approximates the amount of time the calling program has been running. A value of .1 is returned if the time is not available.
+char * asctime ( const struct tm * time );
+This returns a pointer to a string that contains the information stored in the structure pointed to by time converted into the form: day month date hours:minutes:seconds year\n\0
+struct tm *gmtime(const time_t *time);
+This returns a pointer to the time in the form of a tm structure. The time is represented in Coordinated Universal Time (UTC), which is essentially Greenwich Mean Time (GMT).
+time_t mktime(struct tm *time);
+This returns the calendar-time equivalent of the time found in the structure pointed to by time.
+double difftime ( time_t time2, time_t time1 );
+This function calculates the difference in seconds between time1 and time2.
+size_t strftime();
+This function can be used to format date and time in a specific format.
+
+
+
+
+
+
+
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+int main() {
+    // current date/time based on current system
+    time_t now = time(0);
+
+    // Convert now to string form (local time)
+    char dt[26]; // ctime_s requires a buffer of at least 26 bytes
+    ctime_s(dt, sizeof(dt), &now);
+    cout << "The local date and time is: " << dt;
+
+    // Convert to tm struct for UTC
+    tm gmtm;
+    gmtime_s(&gmtm, &now);
+
+    char utc[26];
+    asctime_s(utc, sizeof(utc), &gmtm);
+    cout << "The UTC date and time is: " << utc;
+
+    return 0;
+}
+
+
+
 
 
 
