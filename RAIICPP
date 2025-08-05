@@ -135,6 +135,32 @@ Custom Deleters: You can specify a custom deleter function or functor as a templ
     std::unique_ptr<std::FILE, decltype(&std::fclose)> file_ptr(std::fopen("file.txt", "r"), &std::fclose);
 
 
+int x;
+decltype(x);   //int
+
+fn(){..}
+decltype(fn) //{..}
+
+
+
+
+
+#include <iostream>
+#include <memory>
+
+class MyClass {
+public:
+    MyClass() { std::cout << "Constructed\n"; }
+    ~MyClass() { std::cout << "Destructed\n"; }
+};
+
+int main() {
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();
+    // MyClass is automatically destroyed here
+}
+
+
+
 
 
 
