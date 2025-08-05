@@ -110,6 +110,34 @@ While functional, this method is less preferred due to potential exception safet
     std::unique_ptr<int> ptr(new int(42));
     // Create a unique_ptr to an object of MyClass
     std::unique_ptr<MyClass> obj_ptr(new MyClass());
+Key Characteristics and Operations:
+Exclusive Ownership: unique_ptr cannot be copied; ownership must be transferred using std::move.
+    std::unique_ptr<int> p1 = std::make_unique<int>(10);
+    std::unique_ptr<int> p2 = std::move(p1); // Transfers ownership from p1 to p2
+    // p1 is now null
+Accessing the Managed Object: Use * (dereference operator) or -> (member access operator).
+    std::unique_ptr<int> ptr = std::make_unique<int>(5);
+    int value = *ptr; // Access the integer value
+    // If MyClass has a method 'do_something()'
+    // std::unique_ptr<MyClass> obj_ptr = std::make_unique<MyClass>();
+    // obj_ptr->do_something();
+
+Releasing Ownership: Use release() to relinquish ownership and return the raw pointer. The caller then becomes responsible for managing the memory.
+    std::unique_ptr<int> ptr = std::make_unique<int>(20);
+    int* raw_ptr = ptr.release(); // ptr is now null, raw_ptr points to the int
+    delete raw_ptr; // Manual deletion required
+Resetting the Pointer: Use reset() to release the current resource and optionally take ownership of a new one.
+    std::unique_ptr<int> ptr = std::make_unique<int>(30);
+    ptr.reset(); // Releases the managed int, ptr becomes null
+    ptr.reset(new int(40)); // Releases current (null) and takes ownership of new int
+Custom Deleters: You can specify a custom deleter function or functor as a template argument to unique_ptr to handle resource deallocation in a specific way (e.g., closing a file handle).
+    // Example with a custom deleter for FILE*
+    std::unique_ptr<std::FILE, decltype(&std::fclose)> file_ptr(std::fopen("file.txt", "r"), &std::fclose);
+
+
+
+
+
 
 
 
