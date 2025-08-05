@@ -95,6 +95,24 @@ void main() {
 
 
 
+std::unique_ptr – Exclusive Ownership
+
+This is the recommended way to create a unique_ptr as it provides exception safety and avoids potential issues with raw new expressions.
+    #include <memory> // Required header
+    // Create a unique_ptr to an int, initialized with value 42
+    std::unique_ptr<int> ptr = std::make_unique<int>(42);
+    // Create a unique_ptr to an object of MyClass, using its default constructor
+    std::unique_ptr<MyClass> obj_ptr = std::make_unique<MyClass>();
+Direct Construction with new (Less Preferred).
+While functional, this method is less preferred due to potential exception safety concerns if new throws an exception before the unique_ptr constructor completes.
+    #include <memory> // Required header
+    // Create a unique_ptr to an int, initialized with value 42
+    std::unique_ptr<int> ptr(new int(42));
+    // Create a unique_ptr to an object of MyClass
+    std::unique_ptr<MyClass> obj_ptr(new MyClass());
+
+
+
 
 
 
