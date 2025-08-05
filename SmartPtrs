@@ -330,3 +330,61 @@ int main() {
 
 
 
+#include <iostream>
+class Employee {
+    std::string* name;
+public:
+    Employee(const std::string& empName) {
+        name = new std::string(empName);
+    }
+    void show() const {
+        std::cout << "Employee Name: " << *name << std::endl;
+    }
+    ~Employee() {
+        delete name;
+    }
+};
+ 
+int main() {
+    Employee* emp = new Employee("Alice");
+    emp->show();
+    delete emp;  // Must remember to delete
+    return 0;
+}
+
+
+
+
+#include <iostream>
+#include <memory>  // For smart pointers
+class Employee {
+    std::unique_ptr<std::string> name;
+public:
+    Employee(const std::string& empName)
+        : name(std::make_unique<std::string>(empName)) {}
+    void show() const {
+        std::cout << "Employee Name: " << *name << std::endl;
+    }
+    // No need to manually define destructor!
+};
+ 
+int main() {
+    std::unique_ptr<Employee> emp = std::make_unique<Employee>("Alice");
+    emp->show();
+    // Automatically deleted when going out of scope
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
