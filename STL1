@@ -14,3 +14,43 @@ set
 multiset
 map
 multimap
+
+
+
+
+
+
+STL containers are implemented as template classes. 
+Sequence containers: are ordered collections in which each element has a certain position. Also known as sequential containers.
+Predefined sequential containers in STL: vector, list, deque
+Associative containers: are sorted collections in which the actual position of an element depends on its value due to a certain sorting criterion
+Predefined associative containers in STL: set, map, multiset, multimap
+Container Adapters: meet special needs
+Predefined container adapters in STL: stack, queue, priority queue
+Miscellaneous Containers : bitset, pair, valarray
+
+
+
+
+Vector:
+
+#include<iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector <int> vNums;
+    int i;
+    for (i=1; i<=5; ++i )
+        vNums.push_back(i); //append elements
+    for (i=0; i< vNums.size(); i++ )
+        cout << vNums[ i ] << ' ';
+    cout<<endl;
+    vNums.erase(vNums.begin() );//remove first element
+   cout<<endl;
+    vNums.pop_back();//remove last element
+   for (i = 0; i< vNums.size(); i++)
+        cout << vNums[ i ] << ' ';
+   cout<<endl;
+   return 0;
+}
+
