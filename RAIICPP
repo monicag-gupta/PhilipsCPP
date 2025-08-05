@@ -38,3 +38,42 @@ int main() {
 
 
 
+Reading from a file data.txt
+Without RAII (Manual Resource Management)
+
+
+#include <iostream>
+using namespace std;
+
+void main() {
+    FILE* file = nullptr;
+    errno_t err = fopen_s(&file, "data.txt", "r");  
+    if (err != 0 || file == nullptr) {
+        cout<<("File could not be opened.\n");
+        return;
+    }
+
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file)) {
+       cout<<buffer;
+    }
+
+    fclose(file);  // Closes safely
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
