@@ -1,0 +1,25 @@
+
+Smart Pointers (Header: <memory>)
+std::unique_ptr<T>
+Owns and manages a single object.
+Cannot be copied, only moved.
+#include <memory>
+std::unique_ptr<int> p = std::make_unique<int>(42);
+std::shared_ptr<T>
+Reference-counted ownership.
+Memory is deleted when the last shared_ptr goes out of scope.
+#include <memory>
+std::shared_ptr<int> p1 = std::make_shared<int>(100);
+std::shared_ptr<int> p2 = p1; // Shared ownership
+std::weak_ptr<T>
+Used with shared_ptr to avoid cyclic references.
+Does not contribute to reference count.
+Benefits of Smart Pointers:
+Automatic cleanup (RAII: Resource Acquisition Is Initialization).
+No need for delete.
+Avoid memory leaks.
+Improved exception safety.
+
+
+
+
