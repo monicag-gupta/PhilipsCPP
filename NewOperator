@@ -1,0 +1,98 @@
+Throwing allocation
+void* operator new[] (std::size_t size) throw (std::bad_alloc);
+Allocates size bytes of storage, suitably aligned to represent any object of that size, and returns a non-null pointer to the first byte of this block.
+On failure, it throws a bad_alloc exception.
+The default definition allocates memory by calling  operator new: ::operator new (size).
+If replaced, both operator new and operator new[] shall return pointers with identical properties.
+nothrow allocation
+void* operator new[] (std::size_t size, const std::nothrow_t& nothrow_value) throw();
+Same as above, except that on failure it returns a null pointer instead of throwing an exception.
+The default definition allocates memory by calling the nothrow version of operator new: ::operator new (size,nothrow).
+If replaced, both operator new and operator new[] shall return pointers with identical properties.
+Placement
+void* operator new[] (std::size_t size, void* ptr) throw();
+Simply returns ptr (no storage is allocated).
+Notice though that, if the function is called by the new expression, the proper initialization will be performed (for class objects, this includes calling its default constructor).
+
+
+
+
+//#include "stdafx.h"  //for earlier versions of Visual Studio.
+#include <iostream>     // std::cout
+#include <new>          // ::operator new[]
+struct MyClass {
+	int data;
+	MyClass() { std::cout << '*'; }  // print an asterisk for each construction
+};
+int main() {
+	std::cout << "constructions (1): ";
+	// allocates and constructs five objects:
+	MyClass * p1 = new MyClass[5];
+	std::cout << '\n';
+	std::cout << "constructions (2): ";
+	// allocates and constructs five objects (nothrow):
+	MyClass * p2 = new (std::nothrow) MyClass[5];
+	std::cout << '\n';
+	delete[] p2;
+	delete[] p1;
+	return 0;
+}
+
+
+
+//#include "stdafx.h"  //for earlier versions of Visual Studio.
+#include <iostream>     // std::cout
+#include <new>          // ::operator new
+struct MyClass {
+	int data[100];
+	MyClass() { std::cout << "constructed [" << this << "]\n"; }
+};
+int main() {
+	std::cout << "1: ";
+	MyClass * p1 = new MyClass;
+	// allocates memory by operator new (sizeof(MyClass)) then constructs object at new space
+	std::cout << "2: ";
+	MyClass * p2 = new (std::nothrow) MyClass;
+	// allocates mem. by  op. new (sizeof(MyClass),std::nothrow) then constructs object at new space
+	std::cout << "3: ";
+	new (p2) MyClass;
+	// doesn’t allocate memory-calls: op. new (sizeof(MyClass),p2) but constructs an object at p2
+	// Notice though that calling this function directly does not construct an object:
+	std::cout << "4: ";
+	MyClass * p3 = (MyClass*) ::operator new (sizeof(MyClass));
+	// allocates mem. by calling: op. new (sizeof(MyClass)) but does not call MyClass's constructor
+	delete p1;		delete p2;		delete p3;		return 0;
+}
+
+
+
+Operators:
+new
+Allocates memory for a variable or object.
+int* ptr = new int;      // allocates memory for one int
+*ptr = 10;
+new[]
+Allocates memory for an array.
+int* arr = new int[5];   // allocates array of 5 ints
+delete
+Deallocates memory allocated by new.
+delete ptr;
+delete[]
+Deallocates memory allocated by new[].
+delete[] arr;
+Risks with Manual Memory:
+Memory leaks: If delete is not called.
+Dangling pointers: Using a pointer after deletion.
+Double deletion: Deleting the same memory twice.
+Fragmentation: Unused scattered blocks of memory.
+
+
+
+
+
+
+
+
+
+
+
