@@ -1,0 +1,40 @@
+RAII in C++ (Resource Acquisition Is Initialization):
+
+RAII is a core C++ idiom that ties the lifetime of resources (like memory, files, sockets, locks) to the lifetime of objects. 
+It ensures that resources are acquired during object construction and released during object destruction, automatically and safely.
+Key Principle
+"Bind a resource's lifetime to an object's lifetime."
+When an RAII object goes out of scope (or is deleted), its destructor is automatically called, and the resource is released — no need to remember to clean up manually.
+
+
+
+
+
+#include <iostream>
+class IntArray {
+    int* data;    size_t size;
+public:
+    IntArray(size_t size) : size(size) {
+        data = new int[size]; // Resource acquisition (heap memory)
+       std::cout << "Memory allocated\n";
+    }
+    ~IntArray() {
+        delete[] data; // Resource release
+        std::cout << "Memory deallocated\n";        }
+    void set(size_t index, int value) {
+        if (index < size)
+            data[index] = value;     }
+    int get(size_t index) const {
+        return (index < size) ? data[index] : -1;       }
+};
+int main() {
+    {
+        IntArray arr(5);
+        arr.set(0, 42);
+        std::cout << arr.get(0) << std::endl;  //No Manual Cleanup Required in main(). Memory is released automatically due to RAII
+    }  // RAII: destructor automatically called here
+}
+
+
+
+
