@@ -307,6 +307,31 @@ int main() {
 
 
 
+#include <iostream>
+#include <memory>
+// Custom deleter as a functor
+struct MyDeleter {
+    void operator()(int* ptr) const {
+        std::cout << "MyDeleter: Deleting int with value " << *ptr << std::endl;
+        delete ptr;
+    }
+};
+
+int main() {
+    {
+        // Create unique_ptr with MyDeleter
+        std::unique_ptr<int, MyDeleter> uptr(new int(99));
+        std::cout << "Value inside unique_ptr: " << *uptr << std::endl;
+    } // Exiting scope calls MyDeleter
+    std::cout << "unique_ptr has been destroyed.\n";
+    return 0;
+}
+
+
+
+
+
+
 
 
 
