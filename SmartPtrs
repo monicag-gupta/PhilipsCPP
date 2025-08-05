@@ -46,6 +46,115 @@ int main() {
 
 
 
+Prefer automatic storage or smart pointers over raw new/delete.
+Always initialize your pointers.
+Avoid manual delete in modern C++ unless absolutely necessary.
+Use RAII to manage all resources (not just memory: files, sockets, etc.)
+Tools to Help
+Valgrind (Linux) for memory leak detection.
+Visual Leak Detector (Windows).
+Compiler flags like -fsanitize=address (GCC/Clang).
+
+
+
+
+Stack Allocation Example
+void printNumber() {
+    int x = 10;         // Allocated on stack
+    std::cout << x;
+} // x is automatically deallocated here
+
+Heap Allocation Example
+void printHeapNumber() {
+    int* x = new int(20);    // Allocated on heap
+    std::cout << *x;
+    delete x;                // Must manually deallocate
+}
+
+
+
+
+
+Manual memory management pitfalls C++
+
+1. Memory Leaks
+Memory is allocated but never freed.
+Example:
+int* ptr = new int(10);
+// Forgot to delete ptr
+Problem: Every time this code runs, it consumes more memory that is never released.
+2. Dangling Pointers
+Using memory after it has been freed.
+Example:
+int* ptr = new int(42);
+delete ptr;
+// Now ptr is a dangling pointer
+*ptr = 100;  // Undefined behavior
+Problem: This can lead to crashes or silent corruption of other data.
+3. Double Deletion
+Calling delete twice on the same pointer.
+Example:
+int* ptr = new int(5);
+delete ptr;
+delete ptr;  // Undefined behavior
+Problem: May crash the program or cause heap corruption.
+
+
+
+#include <iostream>
+
+void memoryLeakExample() {
+    std::cout << "\n--- Memory Leak Example ---\n";
+    int* ptr = new int(10);
+    std::cout << "Allocated int with value: " << *ptr << std::endl;
+
+    // Memory Leak: forgot to delete ptr
+    // delete ptr;  // This line is missing intentionally to show the leak
+    // Problem: If this function is called repeatedly, memory usage will grow
+}
+
+void danglingPointerExample() {
+    std::cout << "\n--- Dangling Pointer Example ---\n";
+    int* ptr = new int(42);
+    std::cout << "Allocated int with value: " << *ptr << std::endl;
+
+    delete ptr;
+    std::cout << "Pointer deleted." << std::endl;
+
+    // Dangling Pointer: ptr still points to freed memory
+    // Accessing it now causes undefined behavior
+    *ptr = 100;  // UNDEFINED BEHAVIOR
+    std::cout << "Modified dangling pointer value: " << *ptr << std::endl;
+}
+
+void doubleDeletionExample() {
+    std::cout << "\n--- Double Deletion Example ---\n";
+    int* ptr = new int(5);
+    std::cout << "Allocated int with value: " << *ptr << std::endl;
+
+    delete ptr;
+    std::cout << "Pointer deleted once." << std::endl;
+
+    delete ptr;  // UNDEFINED BEHAVIOR: double delete
+    std::cout << "Pointer deleted twice!" << std::endl;
+}
+
+int main() {
+    memoryLeakExample();
+    // Comment out one by one to observe errors
+    danglingPointerExample();
+    doubleDeletionExample();
+
+    std::cout << "\nProgram finished (may crash or behave unexpectedly due to undefined behavior)." << std::endl;
+    return 0;
+}
+
+
+
+
+
+
+
 
 
 
