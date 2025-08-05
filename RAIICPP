@@ -333,6 +333,34 @@ int main() {
 
 
 
+#include <iostream>
+#include <memory>
+
+void fileCloser(FILE* file) {
+    if (file) {
+        std::cout << "Closing file\n";
+        fclose(file);
+    }
+}
+
+int main() {
+    FILE* rawFile = nullptr;
+    fopen_s(&rawFile, "data.txt", "w");
+
+    std::unique_ptr<FILE, decltype(&fileCloser)> fp(rawFile, fileCloser);
+
+    if (fp) {
+        std::fputs("Hello, custom deleter!\n", fp.get());
+    }
+}
+
+
+
+
+
+
+
+
 
 
 
