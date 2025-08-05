@@ -23,3 +23,29 @@ Improved exception safety.
 
 
 
+
+#include <iostream>
+#include <memory>
+
+class MyClass {
+public:
+    MyClass() { std::cout << "Constructor\n"; }
+    ~MyClass() { std::cout << "Destructor\n"; }
+    void greet() { std::cout << "Hello!\n"; }
+};
+
+int main() {
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();
+    ptr->greet();
+
+    // No need to delete, automatic cleanup
+    return 0;
+}
+
+
+
+
+
+
+
+
