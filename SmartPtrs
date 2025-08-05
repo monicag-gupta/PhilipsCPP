@@ -153,6 +153,96 @@ int main() {
 
 
 
+4. Memory Corruption
+Writing beyond allocated bounds.
+Example:
+int* arr = new int[3];
+arr[3] = 10;  // Out of bounds (0-based indexing)
+Problem: This overwrites adjacent memory, causing unpredictable behavior.
+5. Mismatched Allocation/Deallocation
+Using delete instead of delete[] and vice versa.
+Example:
+int* arr = new int[10];
+delete arr;  // Should be delete[] arr;
+Problem: May not call destructors correctly, leading to resource leaks or crashes.
+6. Not Handling Allocation Failures
+new throws std::bad_alloc if it fails (unless nothrow is used).
+Example:
+int* ptr = new int[1000000000];  // May throw if system is out of memory
+Problem: If not caught, the program crashes.
+
+
+
+#include <iostream>
+#include <new>       // For std::bad_alloc
+using namespace std;
+
+void memoryCorruptionExample() {
+    cout << "\n--- Memory Corruption Example ---\n";
+    int* arr = new int[3];  // Allocating space for 3 integers: arr[0], arr[1], arr[2]
+
+    arr[0] = 1;
+    arr[1] = 2;
+    arr[2] = 3;
+
+    // Memory Corruption: writing out of bounds
+    arr[3] = 99;  // Undefined behavior: arr[3] is out of bounds
+
+    cout << "Value beyond bounds arr[3]: " << arr[3] << " (this is invalid access!)" << endl;
+
+    delete[] arr;
+}
+
+void mismatchedAllocationExample() {
+    cout << "\n--- Mismatched Allocation/Deallocation Example ---\n";
+
+    int* arr = new int[5];  // Allocated with new[]
+    arr[0] = 42;
+
+    // Wrong deallocation
+    delete arr;  // Should be delete[] arr
+
+    // Problem: May lead to resource leaks or runtime issues
+    cout << "Mismatched delete executed (delete used instead of delete[])." << endl;
+}
+
+void allocationFailureExample() {
+    cout << "\n--- Allocation Failure Handling Example ---\n";
+
+    try {
+        // Try allocating a huge block of memory (may fail)
+        int* ptr = new int[1000000000];  // Depends on system; may throw bad_alloc
+
+        cout << "Memory allocation succeeded (unexpected on low-memory systems)." << endl;
+        delete[] ptr;
+    }
+    catch (const bad_alloc& e) {
+        // Proper handling of allocation failure
+        cerr << "Memory allocation failed: " << e.what() << endl;
+    }
+
+    // Optional: Using nothrow to avoid exceptions
+    int* ptr2 = new(nothrow) int[1000000000];
+    if (!ptr2) {
+        cerr << "Memory allocation failed using nothrow." << endl;
+    }
+    else {
+        cout << "Memory allocation with nothrow succeeded." << endl;
+        delete[] ptr2;
+    }
+}
+
+int main() {
+    memoryCorruptionExample();       // ❌ Causes memory corruption
+    mismatchedAllocationExample();   // ❌ Wrong deallocation method
+    allocationFailureExample();      // ✅ Demonstrates exception and nothrow handling
+
+    cout << "\nProgram finished (some parts may crash or behave unpredictably due to memory errors).\n";
+    return 0;
+}
+
+
+
 
 
 
