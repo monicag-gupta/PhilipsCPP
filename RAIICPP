@@ -191,6 +191,71 @@ int main() {
 
 
 
+std::weak_ptr – Non-Owning Reference
+
+Observes a shared_ptr without affecting its reference count
+Useful to break circular references
+
+When to Use:
+To avoid circular references (shared_ptr → shared_ptr)
+You want to check if the object is alive without owning it
+
+
+
+#include <iostream>
+#include <memory>
+
+class MyClass {
+public:
+    MyClass() { std::cout << "Constructed\n"; }
+    ~MyClass() { std::cout << "Destructed\n"; }
+};
+
+int main() {
+    std::shared_ptr<MyClass> shared = std::make_shared<MyClass>();
+    std::weak_ptr<MyClass> weak = shared;  // Doesn't extend lifetime
+
+    std::cout << "Reference count: " << shared.use_count() << "\n";
+
+    if (auto observed = weak.lock()) {
+        std::cout << "Object is still alive.\n";
+    }
+}
+
+
+
+#include <iostream>
+#include <memory>
+
+class Node {
+public:
+    std::shared_ptr<Node> next;  // ❌ shared_ptr causes circular reference
+    Node() { std::cout << "Node created\n"; }
+    ~Node() { std::cout << "Node destroyed\n"; }
+};
+
+int main() {
+    {
+        std::shared_ptr<Node> node1 = std::make_shared<Node>();
+        std::shared_ptr<Node> node2 = std::make_shared<Node>();
+
+        node1->next = node2;
+        node2->next = node1;  // 🔁 Circular reference
+
+        std::cout << "node1 use_count: " << node1.use_count() << std::endl;
+        std::cout << "node2 use_count: " << node2.use_count() << std::endl;
+    }
+    std::cout << "Exited scope.\n";
+    return 0;
+}
+
+
+
+
+
+
+
+
 
 
 
