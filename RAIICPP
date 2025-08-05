@@ -64,6 +64,45 @@ void main() {
 
 
 
+Pitfalls:
+•	Must manually call fclose() — easy to forget
+•	If an early return or an exception occurs, file may not close
+•	No guarantee of cleanup unless we explicitly manage every exit path
+
+
+
+Reading from a file data.txt
+With RAII (Using std::ifstream)
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+void main() {
+    std::ifstream file("data.txt");  // File opened
+
+    if (!file.is_open()) {
+        std::cerr << "File could not be opened.\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::cout << line << std::endl;
+    }
+}  // file is automatically closed when going out of scope
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
