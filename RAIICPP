@@ -374,6 +374,26 @@ std::unique_ptr<FILE, void(*)(FILE*)> fp(rawFile, fileCloser);
 
 
 
+#include <iostream>
+#include <memory>
+
+struct Resource {
+    Resource() { std::cout << "Resource acquired\n"; }
+    ~Resource() { std::cout << "Resource destroyed\n"; }
+};
+
+void customDelete(Resource* r) {
+    std::cout << "Custom delete called\n";
+    delete r;
+}
+
+int main() {
+    std::shared_ptr<Resource> res(new Resource, customDelete);
+}
+
+
+
+
 
 
 
