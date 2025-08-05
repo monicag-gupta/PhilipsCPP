@@ -245,6 +245,88 @@ int main() {
 
 
 
+7. Hidden Ownership Issues
+Unclear which part of the code owns and is responsible for deleting a pointer.
+Example:
+void process(int* data);  // Who owns and deletes 'data'?
+Problem: Can lead to leaks or double deletes due to poor ownership clarity.
+8. Forgetting to Delete in All Code Paths
+A return or exception skips the delete call.
+Example:
+int* ptr = new int(7);
+if (some_condition) return;  // Memory leak
+delete ptr;
+Problem: Hard to track and fix when scattered across multiple returns or exceptions.
+
+
+
+
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+// === 7. Hidden Ownership Problem ===
+void process(int* data) {
+    cout << "\n--- Hidden Ownership Issue ---\n";
+    // Do something with data
+    cout << "Processing data: " << *data << endl;
+
+    // But: Who should delete data?
+    // If we delete it here, caller must NOT delete it
+    // If we don't delete, caller must remember to delete it
+
+    // delete data;  // Uncommenting this may cause double delete if caller also deletes it
+}
+
+void hiddenOwnershipExample() {
+    int* data = new int(42);
+    process(data);
+
+    // Unclear ownership: should we delete here or was it already deleted in process()?
+    delete data;  // Double delete if process() already deleted it
+}
+
+
+// === 8. Forgetting to Delete in All Code Paths ===
+void forgettingToDeleteExample(bool triggerEarlyReturn, bool triggerException) {
+    cout << "\n--- Forgetting to Delete in All Code Paths ---\n";
+    int* ptr = new int(7);
+    cout << "Allocated: " << *ptr << endl;
+
+    if (triggerEarlyReturn) {
+        cout << "Early return — memory leak!\n";
+        return;  // ❌ Leak: delete is never called
+    }
+
+    if (triggerException) {
+        cout << "Throwing exception — memory leak!\n";
+        throw runtime_error("Exception occurred");  // ❌ Leak: delete is skipped
+    }
+
+    delete ptr;  // ✅ Only happens in normal flow
+    cout << "Deleted successfully.\n";
+}
+
+int main() {
+    // Demonstrate Hidden Ownership
+    hiddenOwnershipExample();
+
+    // Demonstrate forgetting to delete on early return
+    forgettingToDeleteExample(true, false);
+
+    // Demonstrate forgetting to delete on exception
+    try {
+        forgettingToDeleteExample(false, true);
+    } catch (const exception& ex) {
+        cout << "Caught exception: " << ex.what() << endl;
+    }
+
+    cout << "\nProgram finished (some paths leak memory).\n";
+    return 0;
+}
+
+
+
 
 
 
