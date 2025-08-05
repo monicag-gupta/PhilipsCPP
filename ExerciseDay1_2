@@ -31,9 +31,9 @@ Step 4: Populate the vector using std::make_unique<>
 
 Step 5: Display all employees using range-based for and auto
 
-Step 6: Use lambda to sort employees by salary (NA)
+Step 6: Use lambda to sort employees by salary 
 Step 7: Demonstrate move semantics:
-Move an employee from one list to another (NA)
+Move an employee from one list to another 
 
 
 
