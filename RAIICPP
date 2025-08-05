@@ -355,6 +355,26 @@ int main() {
 }
 
 
+Note: decltype(&fileCloser) is used to specify the deleter type.
+fp.get()
+fp is a std::unique_ptr<FILE, decltype(&fileCloser)>
+fp.get() returns the raw pointer (FILE*) held by the smart pointer.
+You need the raw pointer here because fputs expects a plain FILE*.
+
+Why not just use fp directly?
+Because std::unique_ptr doesn't overload the FILE* conversion operator. 
+So you must explicitly call .get() to access the raw pointer for fputs().
+
+decltype is a keyword in C++ used to query the type of an expression at compile-time.
+Without decltype, you'd have to write the full type manually:
+std::unique_ptr<FILE, void(*)(FILE*)> fp(rawFile, fileCloser);
+
+
+
+
+
+
+
 
 
 
