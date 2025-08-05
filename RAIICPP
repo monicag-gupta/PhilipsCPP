@@ -163,6 +163,40 @@ int main() {
 
 
 
+std::shared_ptr – Shared Ownership
+
+Multiple shared_ptrs can point to the same object
+Keeps a reference count
+Deletes the object when the last owner is gone
+
+When to Use:
+You need multiple owners
+Lifetime of object is tied to all owners
+
+
+#include <iostream>
+#include <memory>
+
+class MyClass {
+public:
+    MyClass() { std::cout << "Constructed\n"; }
+    ~MyClass() { std::cout << "Destructed\n"; }
+};
+
+int main() {
+    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>();
+    std::shared_ptr<MyClass> ptr2 = ptr1;  // Shared ownership
+    std::cout << "Reference count: " << ptr1.use_count() << "\n";
+}
+
+
+
+
+
+
+
+
+
 
 
 
