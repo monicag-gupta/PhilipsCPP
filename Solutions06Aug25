@@ -56,6 +56,22 @@ Keep everything in sorted order (an automatic property of std::set).
 
 
 
+6. Student Grade Management System using std::map
+Problem Statement:
+Design a program that uses a std::map to store student names as keys and their grades (integer) as values. The program should be menu-driven and allow the user to:
+Add a new student and grade
+Update an existing student’s grade
+Search for a student’s grade
+Remove a student
+Display all students and their grades in alphabetical order
+Display the top-scoring student
+Exit
+
+
+
+
+
+
 
 
 
