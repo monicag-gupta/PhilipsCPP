@@ -183,3 +183,73 @@ int main() {
 }
 
 
+
+
+Map does not allow duplicate keys. Value can be changed, but key remains constant. 
+Multimaps allow duplicates.
+Maps/Multimaps are internally implemented using balanced binary trees. So are sorted for their keys.
+Maps can be used as associative arrays. 
+Multimaps can be used to simulate dictionary.
+Map sort elements automatically based on key, so searching elements for a particular key is very fast. Searching elements that have particular value is slow.
+
+
+
+
+at( ): Returns a reference to the mapped value of the element identified with key. Its time complexity is O(logN). 
+count( ): searches the map for the elements mapped by the given key and returns the number of matches. As map stores each element with unique key, then it will return 1 if match if found otherwise return 0.Its time complexity is O(logN). 
+clear( ): clears the map, by removing all the elements from the map and leaving it with its size 0.Its time complexity is O(N). 
+begin( ): returns an iterator(explained above) referring to the first element of map.Its time complexity is O(1). 
+end( ): returns an iterator referring to the theoretical element(doesn’t point to an element) which follows the last element. Its time complexity is O(1).
+empty( ): checks whether the map is empty or not. It doesn’t modify the map. It returns 1 if the map is empty otherwise returns 0.Its time complexity is O(1).
+erase( ): removes a single element or the range of element from the map.
+find( ): Searches the map for the element with the given key, and returns an iterator to it, if it is present in the map otherwise it returns an iterator to the theoretical element which follows the last element of map. Its time complexity is O(logN). 
+insert( ): insert a single element or the range of element in the map. Its time complexity is O(logN), when only element is inserted and O(1) when position is also given.
+
+
+
+
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+int main(int argc, char ** argv) {
+	map <int, string> mScores;
+	mScores.insert(pair<int, string>(95, "I"));
+	mScores.insert(pair<int, string>(92, "IA"));
+	mScores.insert(pair<int, string>(98, "S"));
+	mScores.insert(pair<int, string>(94, "M"));
+	mScores.insert(pair<int, string>(92, "M"));
+  	map <int, string> ::iterator it;
+	for (it = mScores.begin(); it != mScores.end(); it++)
+		cout << it->first << " - > " << it->second << endl;
+
+	return 0;
+}
+
+
+
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+int main(int argc, char ** argv) {
+	multimap <int, string> mScores;
+	mScores.insert(pair<int, string>(95, "I"));
+	mScores.insert(pair<int, string>(92, "Is"));
+	mScores.insert(pair<int, string>(98, "S"));
+	mScores.insert(pair<int, string>(94, "M"));
+	mScores.insert(pair<int, string>(92, "Ma"));
+  	mScores.insert(pair<int, string>(92, "Ma"));
+	map <int, string> ::iterator it;
+	for (it = mScores.begin(); it != mScores.end(); it++)
+		cout << it->first << " - > " << it->second << endl;
+
+	return 0;
+}
+
+
+
+
+
+
+
