@@ -40,3 +40,24 @@ Displays the list of students.
 Sorts the list by roll number in ascending order.
 Searches for a student by roll number and displays the name if found.
 
+
+
+
+5. “Unique-Word Analyzer” : Write a C++ program that
+Accepts two multi-line paragraphs from the user.
+Tokenises each paragraph into words (ignore punctuation; treat upper/lower case as the same word).
+Stores the words of each paragraph in separate std::set<std::string> objects.
+Outputs
+the words that appear in both paragraphs (intersection),
+the words that appear in either paragraph (union),
+the words that appear only in paragraph 1 (difference P1 − P2), and
+the words that appear only in paragraph 2 (difference P2 − P1).
+Shows the symmetric difference (words that appear in exactly one paragraph, not both).
+Lets the user enter a word to see whether it exists in each paragraph set.
+Constraints / Hints
+Use std::transform to lowercase every word.
+Use std::set_union, std::set_intersection, std::set_difference, and std::set_symmetric_difference from <algorithm>.
+Keep everything in sorted order (an automatic property of std::set).
+
+
+
