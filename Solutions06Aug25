@@ -70,6 +70,54 @@ Exit
 
 
 
+7. Infix Expression Evaluation Using std::stack
+Problem Statement:
+Write a C++ program to evaluate a given arithmetic infix expression (e.g., "3 + 5 * (2 - 4)") and return the correct result. 
+The expression can contain:
+Integers (positive or negative)
+Parentheses: ()
+Operators: +, -, *, /
+Use two stacks:
+One for operands (numbers) : numStack
+One for operators : opStack
+Key Concepts Used:
+std::stack
+Operator precedence
+Infix to postfix conversion idea
+Evaluation of expression using stacks
+
+
+
+
+8. Design a Customer Service System using std::queue to manage the queue of customers waiting for service. Implement the following functionalities:
+Add a customer to the queue.
+Serve (remove) a customer from the front of the queue.
+Display all customers currently in the queue.
+Check the customer currently being served.
+Exit.
+Each customer has:
+Name
+Issue description
+
+
+
+
+9. Hospital Emergency Queue System
+Problem Statement:
+Create a system that simulates a hospital's emergency patient queue. Each patient has:
+A name
+An age
+A severity level (1 to 10, where 10 is most critical)
+The system should:
+Add a patient to the queue.
+Treat (remove) the most critical patient.
+Display the current patient queue.
+Exit.
+Use std::priority_queue to manage patients by severity.
+
+
+
+
 
 
 
