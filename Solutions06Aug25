@@ -8,5 +8,19 @@ Sort the vector in ascending order.
 Display the final vector.
 
 
+2. Write a menu-driven C++ program using std::deque, which allows you to interactively perform all major deque operations through a looped menu system:
+Insert at Front
+Insert at Back
+Delete from Front
+Delete from Back
+Display Front and Back
+Display All Elements
+Sort Deque
+Exit
+
+
+
+
+
 
 
