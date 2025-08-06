@@ -76,3 +76,82 @@ Exit
 
 
 
+Stack
+Container that manages its elements by LIFO policy
+Generally made out of deque
+
+Queue
+Container that manages its elements by FIFO policy 
+Generally used to implement buffers and is made out of deque
+
+Priority Queue
+Container in which the elements have different priorities associated with them. Priority is based on sorting criterion. (next element is element with highest value)
+Generally made out of vector
+
+
+
+
+
+
+
+// stack::push/pop
+#include <iostream>       // std::cout
+#include <stack>          // std::stack
+
+int main () {
+  std::stack<int> mystack;
+  for (int i=0; i<5; ++i) mystack.push(i);
+  std::cout << "Popping out elements...";
+  while (!mystack.empty())  {
+     std::cout << ' ' << mystack.top();
+     mystack.pop();
+  }
+  std::cout << '\n';
+  return 0;
+}
+
+
+
+
+
+
+// queue::push/pop
+#include <iostream>       // std::cin, std::cout
+#include <queue>          // std::queue
+int main () {
+  std::queue<int> myqueue;
+  int myint;
+  std::cout << "Please enter some integers (enter 0 to end):\n";
+  do {
+    std::cin >> myint;
+    myqueue.push (myint);
+  } while (myint);
+  std::cout << "myqueue contains: ";
+  while (!myqueue.empty())  {
+    std::cout << ' ' << myqueue.front();
+    myqueue.pop();
+  }
+  std::cout << '\n';
+  return 0;
+}
+
+
+
+#include <queue>
+#include <iostream>
+int main() {
+	std::priority_queue<int> q;
+	for (int n : {1, 8, 5, 6, 3, 4, 0, 9, 7, 2})
+		q.push(n);
+	while (!q.empty()) {
+		std::cout << q.top() << " ";
+		q.pop();
+	}
+	std::cout << '\n';
+}
+
+
+
+
+
+
