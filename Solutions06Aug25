@@ -1,0 +1,12 @@
+1. Write a C++ program using std::vector that performs the following:
+Input n integers from the user and store them in a vector.
+Display the vector elements.
+Insert a new element at a specific position.
+Delete an element by value.
+Search for an element and display its index if found.
+Sort the vector in ascending order.
+Display the final vector.
+
+
+
+
