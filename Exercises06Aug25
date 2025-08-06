@@ -20,3 +20,13 @@ Sort Deque
 Exit
 
 
+
+3. Use std::list<std::string> for creating a list of names. To do:
+Add names to a list
+Display all names
+Remove a name
+Sort names
+Reverse names
+Exit
+
+
