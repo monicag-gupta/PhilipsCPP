@@ -30,3 +30,13 @@ Reverse names
 Exit
 
 
+
+
+
+4. Write a program that:
+Takes input for n students, where each student has a roll number (int) and name (string).
+Stores each student as a std::pair<int, std::string> in a vector.
+Displays the list of students.
+Sorts the list by roll number in ascending order.
+Searches for a student by roll number and displays the name if found.
+
