@@ -37,3 +37,98 @@ Move an employee from one list to another
 
 
 
+
+
+
+
+
+
+
+
+
+
+Exercise: Extend your Employee Management System in Modern C++ : STL:
+
+Objective Recap:
+You’ve already implemented:
+enum class, unique_ptr, auto, nullptr, range-based for, lambda, and move semantics.
+
+Extension Objectives:
+Add the following:
+STL Containers: set, map, unordered_map, multimap, multiset
+Iterators: begin(), end(), advance(), next(), prev(), reverse iterators
+Algorithms: find_if(), count_if(), sort(), transform(), accumulate(), partition(), for_each()
+
+Suggested Steps with Code:
+
+Step 1: Use std::map<int, Employee*> to index employees by ID
+std::map<int, Employee*> employeeIndex;
+for (const auto& emp : employees) {
+    employeeIndex[emp->getID()] = emp.get();  // raw pointer for demo purpose
+}
+
+Step 2: Search using find_if() by Department
+auto it = std::find_if(employees.begin(), employees.end(), [](const auto& emp) {
+    return emp->getDepartment() == Department::Engineering;
+});
+if (it != employees.end())
+    std::cout << "Engineering Employee: "; (*it)->print();
+
+Step 3: Count Employees with Salary > 50000 using count_if()
+int countHighEarners = std::count_if(employees.begin(), employees.end(), [](const auto& emp) {
+    return emp->getSalary() > 50000;
+});
+std::cout << "High earning employees: " << countHighEarners << std::endl;
+
+Step 4: Use std::transform() to give salary hike to all
+std::for_each(employees.begin(), employees.end(), [](auto& emp) {
+    emp->setSalary(emp->getSalary() * 1.10);  // 10% hike
+});
+
+Step 5: Display all Employees using Reverse Iterators
+for (auto it = employees.rbegin(); it != employees.rend(); ++it) {
+    (*it)->print();
+}
+
+Step 6: Use std::partition() to separate high earners
+auto mid = std::partition(employees.begin(), employees.end(), [](const auto& emp) {
+    return emp->getSalary() > 60000;
+});
+std::cout << "High Earners:\n";
+std::for_each(employees.begin(), mid, [](const auto& emp) { emp->print(); });
+
+Step 7: Use std::accumulate() to calculate total payroll
+double totalSalary = std::accumulate(employees.begin(), employees.end(), 0.0, [](double sum, const auto& emp) {
+    return sum + emp->getSalary();
+});
+std::cout << "Total Payroll: " << totalSalary << std::endl;
+
+Step 8: Use std::set to store unique departments
+std::set<Department> departments;
+for (const auto& emp : employees) {
+    departments.insert(emp->getDepartment());
+}
+
+Step 9: Use std::multimap for grouping employees by department
+std::multimap<Department, std::string> deptMap;
+for (const auto& emp : employees) {
+    deptMap.insert({ emp->getDepartment(), emp->getName() });
+}
+std::cout << "Employees Grouped by Department:\n";
+for (const auto& [dept, name] : deptMap) {
+    std::cout << static_cast<int>(dept) << ": " << name << std::endl;
+}
+
+Step 10: Use Iterators explicitly to display names
+std::cout << "Employee Names:\n";
+for (auto it = employees.begin(); it != employees.end(); ++it) {
+    std::cout << (*it)->getName() << std::endl;
+}
+
+Step 11: Store sorted salaries in std::vector using transform()
+std::vector<double> salaries;
+std::transform(employees.begin(), employees.end(), std::back_inserter(salaries), [](const auto& emp) {
+    return emp->getSalary();
+});
+std::sort(salaries.begin(), salaries.end());
+
