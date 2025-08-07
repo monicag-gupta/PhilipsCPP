@@ -951,6 +951,128 @@ int main() {
 
 
 
+Modifying Algorithms
+for_each() 
+copy() 
+copy_backward()
+transform()
+merge() 
+swap_ranges() 
+fill() 
+fill_n() 
+generate_n() 
+replace() 
+replace_if()
+replace_copy()
+replace_copy_if()
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>      // for iota
+#include <iterator>     // for back_inserter
+#include <cstdlib>      // for rand
+
+int main() {
+    std::vector<int> v1(5);
+    std::iota(v1.begin(), v1.end(), 1); // v1 = {1, 2, 3, 4, 5}
+
+    std::cout << "Original v1: ";
+    std::for_each(v1.begin(), v1.end(), [](int n) { std::cout << n << " "; });
+    std::cout << "\n";
+
+    // copy
+    std::vector<int> v2(5);
+    std::copy(v1.begin(), v1.end(), v2.begin());
+
+    // copy_backward
+    std::vector<int> v3(7, 0); // extra space at front
+    std::copy_backward(v1.begin(), v1.end(), v3.end()); // v3 = {0, 0, 1, 2, 3, 4, 5}
+
+    // transform: double each element
+    std::vector<int> v4;
+    std::transform(v1.begin(), v1.end(), std::back_inserter(v4), [](int n) { return n * 2; }); // v4 = {2, 4, 6, 8, 10}
+
+    // merge two sorted vectors
+    std::vector<int> v5 = { 1, 3, 5 };
+    std::vector<int> v6 = { 2, 4, 6 };
+    std::vector<int> merged;
+    std::merge(v5.begin(), v5.end(), v6.begin(), v6.end(), std::back_inserter(merged)); // merged = {1,2,3,4,5,6}
+
+    // swap_ranges
+    std::vector<int> v7 = { 10, 20, 30, 40, 50 };
+    std::swap_ranges(v1.begin(), v1.end(), v7.begin()); // v1 = {10,20,30,40,50}, v7 = {1,2,3,4,5}
+
+    // fill
+    std::vector<int> v8(5);
+    std::fill(v8.begin(), v8.end(), 7); // v8 = {7,7,7,7,7}
+
+    // fill_n
+    std::fill_n(v8.begin(), 3, 9); // v8 = {9,9,9,7,7}
+
+    // generate_n
+    std::vector<int> v9(5);
+    int seed = 1;
+    std::generate_n(v9.begin(), 5, [&seed]() { return seed++ * 2; }); // v9 = {2,4,6,8,10}
+
+    // replace
+    std::vector<int> v10 = { 1, 2, 2, 3, 2 };
+    std::replace(v10.begin(), v10.end(), 2, 99); // v10 = {1, 99, 99, 3, 99}
+
+    // replace_if
+    std::replace_if(v10.begin(), v10.end(), [](int n) { return n > 90; }, 42); // v10 = {1, 42, 42, 3, 42}
+
+    // replace_copy
+    std::vector<int> v11;
+    std::replace_copy(v1.begin(), v1.end(), std::back_inserter(v11), 40, 400); // replaces 40 in copy
+
+    // replace_copy_if
+    std::vector<int> v12;
+    std::replace_copy_if(v1.begin(), v1.end(), std::back_inserter(v12), [](int n) { return n > 30; }, 300);
+
+    // Print final vectors
+    std::cout << "\nv1 after swap: ";
+    for (int n : v1) std::cout << n << " ";
+
+    std::cout << "\nv3 (copy_backward): ";
+    for (int n : v3) std::cout << n << " ";
+
+    std::cout << "\nv4 (transformed): ";
+    for (int n : v4) std::cout << n << " ";
+
+    std::cout << "\nmerged: ";
+    for (int n : merged) std::cout << n << " ";
+
+    std::cout << "\nv7 after swap: ";
+    for (int n : v7) std::cout << n << " ";
+
+    std::cout << "\nv8 (fill and fill_n): ";
+    for (int n : v8) std::cout << n << " ";
+
+    std::cout << "\nv9 (generate_n): ";
+    for (int n : v9) std::cout << n << " ";
+
+    std::cout << "\nv10 (replace + replace_if): ";
+    for (int n : v10) std::cout << n << " ";
+
+    std::cout << "\nv11 (replace_copy): ";
+    for (int n : v11) std::cout << n << " ";
+
+    std::cout << "\nv12 (replace_copy_if): ";
+    for (int n : v12) std::cout << n << " ";
+
+    return 0;
+}
+
+
+
+
+
+
+
 
 
 
