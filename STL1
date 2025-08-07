@@ -1070,6 +1070,71 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+bool isEven(int n) {
+    return n % 2 == 0;
+}
+
+int main() {
+    std::vector<int> data = { 1, 2, 3, 2, 4, 5, 2, 6, 6, 7 };
+
+    // 1️⃣ std::remove: removes all 2s (but doesn't shrink container)
+    std::vector<int> v1 = data;
+    auto new_end = std::remove(v1.begin(), v1.end(), 2);
+    v1.erase(new_end, v1.end());
+    std::cout << "After remove(2): ";
+    for (int i : v1) std::cout << i << " ";
+    std::cout << "\n";
+
+    // 2️⃣ std::remove_if: removes all even numbers
+    std::vector<int> v2 = data;
+    new_end = std::remove_if(v2.begin(), v2.end(), isEven);
+    v2.erase(new_end, v2.end());
+    std::cout << "After remove_if(even): ";
+    for (int i : v2) std::cout << i << " ";
+    std::cout << "\n";
+
+    // 3️⃣ std::remove_copy: copies all except 2s to new vector
+    std::vector<int> v3;
+    std::remove_copy(data.begin(), data.end(), std::back_inserter(v3), 2);
+    std::cout << "After remove_copy(2): ";
+    for (int i : v3) std::cout << i << " ";
+    std::cout << "\n";
+
+    // 4️⃣ std::remove_copy_if: copies only odd numbers
+    std::vector<int> v4;
+    std::remove_copy_if(data.begin(), data.end(), std::back_inserter(v4), isEven);
+    std::cout << "After remove_copy_if(even): ";
+    for (int i : v4) std::cout << i << " ";
+    std::cout << "\n";
+
+    // 5️⃣ std::unique: removes adjacent duplicates (note: only adjacent)
+    std::vector<int> v5 = { 1, 1, 2, 2, 2, 3, 4, 4, 5 };
+    new_end = std::unique(v5.begin(), v5.end());
+    v5.erase(new_end, v5.end());
+    std::cout << "After unique(): ";
+    for (int i : v5) std::cout << i << " ";
+    std::cout << "\n";
+
+    // 6️⃣ std::unique_copy: copy to new vector skipping adjacent duplicates
+    std::vector<int> v6;
+    std::unique_copy(v5.begin(), v5.end(), std::back_inserter(v6));
+    std::cout << "After unique_copy(): ";
+    for (int i : v6) std::cout << i << " ";
+    std::cout << "\n";
+
+    return 0;
+}
+
+
+
+
+
+
 
 
 
