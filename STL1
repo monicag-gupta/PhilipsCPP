@@ -623,6 +623,35 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <cctype>
+using namespace std;
+int main(int argc, char** argv) {
+    vector <char> vNames;
+    for (char ch = 'a'; ch <= 'z'; ++ch)
+        vNames.push_back(ch);
+
+    vector <char> ::iterator it;
+    for (it = vNames.begin(); it != vNames.end(); it++)
+        cout << *it;
+    for (it = vNames.begin(); it != vNames.end(); it++)
+        *it = toupper(*it);
+    for (it = vNames.begin(); it != vNames.end(); it++)
+        cout << *it;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
