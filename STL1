@@ -531,6 +531,99 @@ int main() {
 
 
 
+#include <iostream>
+#include <unordered_map>
+#include <string>
+
+int main() {
+    // Declare an unordered_map to store student names and their marks
+    std::unordered_map<std::string, int> studentMarks;
+
+    // Insert values
+    studentMarks["Alice"] = 85;
+    studentMarks["Bob"] = 90;
+    studentMarks["Charlie"] = 78;
+
+    // Update value
+    studentMarks["Alice"] = 88;
+
+    // Accessing values
+    std::cout << "Marks of Alice: " << studentMarks["Alice"] << "\n";
+
+    // Iterating through the unordered_map
+    std::cout << "\nAll student marks:\n";
+    for (const auto& pair : studentMarks) {
+        std::cout << pair.first << " => " << pair.second << "\n";
+    }
+
+    // Find a key
+    std::string name = "Charlie";
+    if (studentMarks.find(name) != studentMarks.end()) {
+        std::cout << "\nFound " << name << " with marks: " << studentMarks[name] << "\n";
+    }
+
+    // Erase a key
+    studentMarks.erase("Bob");
+
+    std::cout << "\nAfter erasing Bob:\n";
+    for (const auto& pair : studentMarks) {
+        std::cout << pair.first << " => " << pair.second << "\n";
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+#include <iostream>
+#include <unordered_map>
+#include <string>
+
+int main() {
+    // Create an unordered_multimap of department and employee names
+    std::unordered_multimap<std::string, std::string> departmentEmployees;
+
+    // Insert key-value pairs (duplicate keys allowed)
+    departmentEmployees.insert({"HR", "Alice"});
+    departmentEmployees.insert({"IT", "Bob"});
+    departmentEmployees.insert({"HR", "Charlie"});
+    departmentEmployees.insert({"IT", "David"});
+    departmentEmployees.insert({"Finance", "Eve"});
+
+    // Print all values
+    std::cout << "Department -> Employees:\n";
+    for (const auto& entry : departmentEmployees) {
+        std::cout << entry.first << " -> " << entry.second << "\n";
+    }
+
+    // Count how many employees in HR
+    std::string dept = "HR";
+    int count = departmentEmployees.count(dept);
+    std::cout << "\nNumber of employees in " << dept << ": " << count << "\n";
+
+    // Get all employees in IT
+    std::cout << "\nEmployees in IT department:\n";
+    auto range = departmentEmployees.equal_range("IT");
+    for (auto it = range.first; it != range.second; ++it) {
+        std::cout << it->second << "\n";
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
