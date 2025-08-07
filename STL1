@@ -332,6 +332,12 @@ int main() {
 
 
 
+unordered_set stores unique elements (no duplicates).
+It uses hashing internally, so average time complexity for insert/find/erase is O(1).
+Order of elements is not guaranteed.
+Fast for lookups compared to std::set.
+
+
 
 
 #include <iostream>
@@ -375,6 +381,97 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+
+
+#include <iostream>
+#include <unordered_set>
+#include <string>
+
+int main() {
+    // Create an unordered_multiset of strings
+    std::unordered_multiset<std::string> animals;
+
+    // Insert some animals (including duplicates)
+    animals.insert("Tiger");
+    animals.insert("Elephant");
+    animals.insert("Tiger");     // Duplicate allowed
+    animals.insert("Leopard");
+    animals.insert("Elephant");  // Duplicate allowed
+
+    // Display contents
+    std::cout << "Animals in the unordered_multiset:\n";
+    for (const auto& animal : animals) {
+        std::cout << animal << "\n";
+    }
+
+    // Count occurrences
+    std::cout << "\nNumber of Tigers: " << animals.count("Tiger") << "\n";
+    std::cout << "Number of Elephants: " << animals.count("Elephant") << "\n";
+
+    // Erase all Tigers
+    animals.erase("Tiger");
+
+    std::cout << "\nAfter erasing all Tigers:\n";
+    for (const auto& animal : animals) {
+        std::cout << animal << "\n";
+    }
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include <unordered_map>
+#include <string>
+
+int main() {
+    // Declare an unordered_map to store student names and their marks
+    std::unordered_map<std::string, int> studentMarks;
+
+    // Insert values
+    studentMarks["Alice"] = 85;
+    studentMarks["Bob"] = 90;
+    studentMarks["Charlie"] = 78;
+
+    // Update value
+    studentMarks["Alice"] = 88;
+
+    // Accessing values
+    std::cout << "Marks of Alice: " << studentMarks["Alice"] << "\n";
+
+    // Iterating through the unordered_map
+    std::cout << "\nAll student marks:\n";
+    for (const auto& pair : studentMarks) {
+        std::cout << pair.first << " => " << pair.second << "\n";
+    }
+
+    // Find a key
+    std::string name = "Charlie";
+    if (studentMarks.find(name) != studentMarks.end()) {
+        std::cout << "\nFound " << name << " with marks: " << studentMarks[name] << "\n";
+    }
+
+    // Erase a key
+    studentMarks.erase("Bob");
+
+    std::cout << "\nAfter erasing Bob:\n";
+    for (const auto& pair : studentMarks) {
+        std::cout << pair.first << " => " << pair.second << "\n";
+    }
+
+    return 0;
+}
+
+
+
 
 
 
