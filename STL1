@@ -1707,6 +1707,21 @@ int main() {
 
 
 
+people.push_back(Person("Alice", 30));
+does the following:
+Creates a temporary Person("Alice", 30) object. That temporary is then copied into the vector via push_back. After the copy, the temporary is destroyed. 
+Depending on compiler optimizations and available constructors (like move constructor), it might prefer move. So now copy and move both are constructed.
+Later, when the vector goes out of scope, its internal copy is destroyed too.
+So for push_back(Person("Alice", 30)), you get:
+1 constructor for the temporary, 1 for copy, 1 for move
+1 destructor for the temporary, 1 destructor for the copy, 1 for move inside the vector (when main() ends)
+people.emplace_back("Bob", 25);
+does:
+Directly constructs the Person inside the vector using emplace_back.
+No temporary is created.
+Only 1 constructor and 1 destructor (when the vector goes out of scope).
+
+
 
 
 
