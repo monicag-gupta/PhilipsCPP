@@ -328,3 +328,60 @@ int main() {
 
 
 
+
+
+
+
+
+
+#include <iostream>
+#include <unordered_set>
+#include <string>
+
+int main() {
+    // Create an unordered_set of strings
+    std::unordered_set<std::string> cities;
+
+    // Insert some cities
+    cities.insert("Delhi");
+    cities.insert("Mumbai");
+    cities.insert("Chennai");
+    cities.insert("Kolkata");
+
+    // Try to insert a duplicate
+    cities.insert("Delhi"); // Won't be added again
+
+    // Display the contents
+    std::cout << "Cities in the unordered_set:\n";
+    for (const auto& city : cities) {
+        std::cout << city << "\n";
+    }
+
+    // Check if a city exists
+    std::string check = "Mumbai";
+    if (cities.find(check) != cities.end()) {
+        std::cout << check << " is in the set.\n";
+    } else {
+        std::cout << check << " is not in the set.\n";
+    }
+
+    // Remove a city
+    cities.erase("Chennai");
+
+    std::cout << "\nAfter removing Chennai:\n";
+    for (const auto& city : cities) {
+        std::cout << city << "\n";
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
