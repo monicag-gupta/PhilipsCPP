@@ -1329,6 +1329,102 @@ int main() {
 
 
 
+Sorted Range Algorithms
+binary_search() 
+includes() 
+upper_bound() 
+equal_range()
+merge() 
+set_union() 
+set_intersection() 
+set_difference() 
+set_symmetric_difference() 
+inplace_merge()
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+int main() {
+    // Sorted vectors
+    vector<int> a = { 1, 2, 4, 5, 7 };
+    vector<int> b = { 2, 3, 5, 6 };
+
+    // binary_search()
+    bool found = binary_search(a.begin(), a.end(), 4);
+    cout << "binary_search(4) in a: " << (found ? "Yes" : "No") << endl;
+
+    // includes(): check if all elements of b are in a
+    bool inc = includes(a.begin(), a.end(), b.begin(), b.end());
+    cout << "includes(b in a): " << (inc ? "Yes" : "No") << endl;
+
+    // upper_bound()
+    auto ub = upper_bound(a.begin(), a.end(), 4);
+    cout << "upper_bound(4) in a: " << *ub << endl;
+
+    // equal_range()
+    vector<int> c = { 1, 2, 4, 4, 4, 5, 7 };
+    auto [low, high] = equal_range(c.begin(), c.end(), 4);
+    cout << "equal_range(4): ";
+    for (auto it = low; it != high; ++it) cout << *it << " ";
+    cout << endl;
+
+    // merge(): merge a and b into c
+    vector<int> merged;
+    merge(a.begin(), a.end(), b.begin(), b.end(), back_inserter(merged));
+    cout << "merge(a, b): ";
+    for (int x : merged) cout << x << " ";
+    cout << endl;
+
+    // set_union()
+    vector<int> sunion;
+    set_union(a.begin(), a.end(), b.begin(), b.end(), back_inserter(sunion));
+    cout << "set_union(a, b): ";
+    for (int x : sunion) cout << x << " ";
+    cout << endl;
+
+    // set_intersection()
+    vector<int> sinter;
+    set_intersection(a.begin(), a.end(), b.begin(), b.end(), back_inserter(sinter));
+    cout << "set_intersection(a, b): ";
+    for (int x : sinter) cout << x << " ";
+    cout << endl;
+
+    // set_difference()
+    vector<int> sdiff;
+    set_difference(a.begin(), a.end(), b.begin(), b.end(), back_inserter(sdiff));
+    cout << "set_difference(a - b): ";
+    for (int x : sdiff) cout << x << " ";
+    cout << endl;
+
+    // set_symmetric_difference()
+    vector<int> symdiff;
+    set_symmetric_difference(a.begin(), a.end(), b.begin(), b.end(), back_inserter(symdiff));
+    cout << "set_symmetric_difference(a, b): ";
+    for (int x : symdiff) cout << x << " ";
+    cout << endl;
+
+    // inplace_merge()
+    vector<int> d = { 1, 3, 5, 2, 4, 6 };
+    inplace_merge(d.begin(), d.begin() + 3, d.end());
+    cout << "inplace_merge(): ";
+    for (int x : d) cout << x << " ";
+    cout << endl;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
 
 
 
