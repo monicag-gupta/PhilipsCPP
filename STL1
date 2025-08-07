@@ -1558,6 +1558,112 @@ int main() {
 
 
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <map>
+
+class Person {
+public:
+    std::string name;
+    int age;
+
+    Person(std::string n, int a) : name(n), age(a) {}
+
+    // Overload == for equality-based algorithms (e.g., find)
+    bool operator==(const Person& other) const {
+        return name == other.name && age == other.age;
+    }
+
+    // Overload < for sorting and ordered containers
+    bool operator<(const Person& other) const {
+        // First sort by age, then by name
+        return age != other.age ? age < other.age : name < other.name;
+    }
+};
+
+// Overload << for printing
+std::ostream& operator<<(std::ostream& os, const Person& p) {
+    os << "[" << p.name << ", " << p.age << "]";
+    return os;
+}
+int main() {
+    std::vector<Person> people = {
+        {"Alice", 30}, {"Bob", 25}, {"Charlie", 30}, {"David", 20}
+    };
+
+    // Sort using overloaded < operator
+    std::sort(people.begin(), people.end());
+
+    std::cout << "Sorted People:\n";
+    for (const auto& p : people)
+        std::cout << p << "\n";
+
+    // Find a specific person
+    Person key("Bob", 25);
+    auto it = std::find(people.begin(), people.end(), key);
+    if (it != people.end()) {
+        std::cout << "\nFound: " << *it << "\n";
+    }
+
+    // Insert into set (requires < operator)
+    std::set<Person> personSet(people.begin(), people.end());
+
+    std::cout << "\nUnique People in set:\n";
+    for (const auto& p : personSet)
+        std::cout << p << "\n";
+
+    // Insert into map (key is Person)
+    std::map<Person, std::string> personMap;
+    for (const auto& p : people) {
+        personMap[p] = "Employee";
+    }
+
+    std::cout << "\nPerson Map:\n";
+    for (const auto& item : personMap)
+        std::cout << item.first << " -> " << item.second << "\n";
+
+    return 0;
+}
+/*
+
+Output:
+Sorted People:
+[David, 20]
+[Bob, 25]
+[Alice, 30]
+[Charlie, 30]
+
+Found: [Bob, 25]
+
+Unique People in set:
+[David, 20]
+[Bob, 25]
+[Alice, 30]
+[Charlie, 30]
+
+Person Map:
+[David, 20] -> Employee
+[Bob, 25] -> Employee
+[Alice, 30] -> Employee
+[Charlie, 30] -> Employee
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
