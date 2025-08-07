@@ -859,6 +859,98 @@ return 0;
 
 
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
+
+int main() {
+    std::vector<int> vec = { 1, 2, 3, 4, 2, 5, 2, 6, 7, 2 };
+
+    // for_each
+    std::cout << "for_each: ";
+    std::for_each(vec.begin(), vec.end(), [](int x) {
+        std::cout << x << " ";
+        });
+    std::cout << "\n";
+
+    // count
+    int count2 = std::count(vec.begin(), vec.end(), 2);
+    std::cout << "count of 2: " << count2 << "\n";
+
+    // count_if
+    int countEven = std::count_if(vec.begin(), vec.end(), [](int x) { return x % 2 == 0; });
+    std::cout << "count of even numbers: " << countEven << "\n";
+
+    // min_element
+    auto minIt = std::min_element(vec.begin(), vec.end());
+    std::cout << "min_element: " << *minIt << "\n";
+
+    // max_element
+    auto maxIt = std::max_element(vec.begin(), vec.end());
+    std::cout << "max_element: " << *maxIt << "\n";
+
+    // find
+    auto find5 = std::find(vec.begin(), vec.end(), 5);
+    std::cout << "find 5: " << (find5 != vec.end() ? "Found\n" : "Not Found\n");
+
+    // find_if
+    auto find_gt5 = std::find_if(vec.begin(), vec.end(), [](int x) { return x > 5; });
+    std::cout << "first element > 5: " << *find_gt5 << "\n";
+
+    // search_n
+    auto search2x3 = std::search_n(vec.begin(), vec.end(), 3, 2); // 3 consecutive 2s
+    std::cout << "search_n (three 2s): ";
+    if (search2x3 != vec.end()) std::cout << "Found at index " << std::distance(vec.begin(), search2x3) << "\n";
+    else std::cout << "Not Found\n";
+
+    // search
+    std::vector<int> subsequence = { 2, 5, 2 };
+    auto it = std::search(vec.begin(), vec.end(), subsequence.begin(), subsequence.end());
+    std::cout << "search {2,5,2}: ";
+    if (it != vec.end()) std::cout << "Found at index " << std::distance(vec.begin(), it) << "\n";
+    else std::cout << "Not Found\n";
+
+    // find_end
+    auto lastMatch = std::find_end(vec.begin(), vec.end(), subsequence.begin(), subsequence.end());
+    std::cout << "find_end {2,5,2}: ";
+    if (lastMatch != vec.end()) std::cout << "Found at index " << std::distance(vec.begin(), lastMatch) << "\n";
+    else std::cout << "Not Found\n";
+
+    // find_first_of
+    std::vector<int> targets = { 4, 7 };
+    auto firstOf = std::find_first_of(vec.begin(), vec.end(), targets.begin(), targets.end());
+    std::cout << "find_first_of {4,7}: " << *firstOf << " at index " << std::distance(vec.begin(), firstOf) << "\n";
+
+    // adjacent_find
+    std::vector<int> vec2 = { 1, 2, 3, 3, 4 };
+    auto adj = std::adjacent_find(vec2.begin(), vec2.end());
+    std::cout << "adjacent_find: ";
+    if (adj != vec2.end()) std::cout << *adj << " and " << *(adj + 1) << " at index " << std::distance(vec2.begin(), adj) << "\n";
+    else std::cout << "No adjacent equal elements\n";
+
+    // equal
+    std::vector<int> vec3 = { 1, 2, 3, 4, 5 };
+    std::vector<int> vec4 = { 1, 2, 3, 4, 5 };
+    std::cout << "equal: " << (std::equal(vec3.begin(), vec3.end(), vec4.begin()) ? "True\n" : "False\n");
+
+    // mismatch
+    std::vector<int> vec5 = { 1, 2, 0, 4, 5 };
+    auto mismatchPair = std::mismatch(vec3.begin(), vec3.end(), vec5.begin());
+    std::cout << "mismatch: " << *mismatchPair.first << " != " << *mismatchPair.second << "\n";
+
+    // lexicographical_compare
+    std::vector<int> a = { 1, 2, 3 };
+    std::vector<int> b = { 1, 2, 4 };
+    std::cout << "lexicographical_compare: " << (std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end()) ? "True\n" : "False\n");
+
+    return 0;
+}
+
+
+
+
 
 
 
