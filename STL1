@@ -1230,6 +1230,110 @@ int main() {
 
 
 
+Sorting Algorithms
+sort() 
+stable_sort() 
+partial_sort() 
+partial_sort_copy() 
+nth_element() 
+stable_partition() 
+make_heap() 
+push_heap() 
+pop_heap() 
+sort_heap()
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+bool isEven(int x) {
+    return x % 2 == 0;
+}
+
+int main() {
+    vector<int> v = {7, 1, 4, 9, 2, 6, 3, 8, 5};
+
+    // sort(): regular sort (not stable)
+    vector<int> v1 = v;
+    sort(v1.begin(), v1.end());
+    cout << "sort(): ";
+    for (int x : v1) cout << x << " ";
+    cout << endl;
+
+    // stable_sort(): maintains relative order
+    vector<pair<int, char>> v2 = {{4, 'a'}, {2, 'b'}, {4, 'c'}, {1, 'd'}};
+    stable_sort(v2.begin(), v2.end());
+    cout << "stable_sort(): ";
+    for (auto [n, c] : v2) cout << "(" << n << "," << c << ") ";
+    cout << endl;
+
+    // partial_sort(): first N smallest elements sorted
+    vector<int> v3 = v;
+    partial_sort(v3.begin(), v3.begin() + 5, v3.end());
+    cout << "partial_sort() (first 5): ";
+    for (int x : v3) cout << x << " ";
+    cout << endl;
+
+    // partial_sort_copy(): copy first N sorted to another container
+    vector<int> v4(5);
+    partial_sort_copy(v.begin(), v.end(), v4.begin(), v4.end());
+    cout << "partial_sort_copy(): ";
+    for (int x : v4) cout << x << " ";
+    cout << endl;
+
+    // nth_element(): nth element at correct position, not fully sorted
+    vector<int> v5 = v;
+    nth_element(v5.begin(), v5.begin() + 4, v5.end());
+    cout << "nth_element() (5th smallest): " << v5[4] << endl;
+
+    // stable_partition(): even numbers first, maintaining order
+    vector<int> v6 = v;
+    stable_partition(v6.begin(), v6.end(), isEven);
+    cout << "stable_partition() (evens first): ";
+    for (int x : v6) cout << x << " ";
+    cout << endl;
+
+    // Heap operations
+    vector<int> v7 = v;
+    make_heap(v7.begin(), v7.end());
+    cout << "make_heap(): ";
+    for (int x : v7) cout << x << " ";
+    cout << endl;
+
+    v7.push_back(10);
+    push_heap(v7.begin(), v7.end());
+    cout << "push_heap() (added 10): ";
+    for (int x : v7) cout << x << " ";
+    cout << endl;
+
+    pop_heap(v7.begin(), v7.end());
+    int max_val = v7.back();
+    v7.pop_back();
+    cout << "pop_heap(): max = " << max_val << ", remaining: ";
+    for (int x : v7) cout << x << " ";
+    cout << endl;
+
+    sort_heap(v7.begin(), v7.end());
+    cout << "sort_heap(): ";
+    for (int x : v7) cout << x << " ";
+    cout << endl;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
 
 
 
