@@ -1681,6 +1681,31 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <string>
+struct Person {
+    std::string name;
+    int age;
+    Person(std::string n, int a) : name(n), age(a) {
+        std::cout << "Constructed Person :" << n << " : " << a << " with address " << this << "\n";
+    }
+    Person() { std::cout << "Constructed default Person :" << name << " : " << age << " with address " << this << "\n"; }
+    Person(const Person& other) { this->name = other.name; this->age = other.age; std::cout << "Constructed copy Person :" << other.name << " : " << other.age << " with address " << this << "\n"; }
+    Person(Person&& other) noexcept { name = std::move(other.name); this->age = other.age; std::cout << "Constructed move Person :" << other.name << " : " << other.age << " with address " << this << "\n"; }
+
+    ~Person() { std::cout << "Destructing Person :" << name << " : " << age << " with address " << this << "\n"; }
+};
+int main() {
+    std::vector<Person> people;
+    // push_back: creates a temporary Person object first
+    people.push_back(Person("Alice", 30));
+    // emplace_back: constructs directly in the vector
+    people.emplace_back("Bob", 25);
+}
+
+
+
 
 
 
