@@ -1657,6 +1657,31 @@ Person Map:
 
 
 
+#include <iostream>
+#include <vector>
+#include <string>
+struct Person {
+    std::string name;
+    int age;
+    Person(std::string n, int a) : name(n), age(a) {
+        std::cout << "Constructed Person :" <<n<<" : " << a << " with address " << this << "\n";
+    }
+    Person(){ std::cout << "Constructed default Person :" << name << " : " << age << " with address " << this << "\n"; }
+    ~Person() { std::cout << "Destructing Person :" << name << " : " << age << " with address " << this << "\n"; }
+};
+int main() {
+    std::vector<Person> people;
+    // push_back: creates a temporary Person object first
+    people.push_back(Person("Alice", 30));
+    // emplace_back: constructs directly in the vector
+    people.emplace_back("Bob", 25);
+}
+
+
+
+
+
+
 
 
 
