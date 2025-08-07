@@ -673,6 +673,201 @@ int main() {
 
 
 
+STL - container selection guidelines
+
+Vector is used in place of dynamically allocated array
+List allows dynamically changing size for linear access
+Set is used when we need to keep data sorted
+Map is used when we want indexed data
+Multi(set/map) is used when we need multiple keys
+
+
+
+
+Trade-offs
+
+1. std::vector
+Pros:
+Fast random access (O(1))
+Good cache locality (elements stored contiguously)
+Efficient insertions/removals at the end (O(1) amortized)
+Cons:
+Inserting/removing in the middle or front is expensive (O(n))
+Reallocation may invalidate pointers/references/iterators
+Use When: You need fast access and mostly add to the end.
+2. std::deque
+Pros:
+Fast insertions/removals at both ends (O(1))
+No reallocation like vector (uses blocks of memory)
+Cons:
+No contiguous storage → worse cache performance than vector
+Random access slower than vector
+Use When: You need frequent push/pop at both ends.
+
+
+3. std::list (Doubly Linked List)
+Pros:
+Fast insertions/removals anywhere (O(1) if iterator known)
+Stable pointers/iterators (never invalidated unless deleted)
+Cons:
+No random access (O(n))
+Higher memory overhead (extra pointers per node)
+Poor cache performance
+Use When: You need constant time insert/erase in the middle.
+4. std::forward_list (Singly Linked List)
+Pros:
+Lower memory overhead than list
+Good for memory-efficient linear processing
+Cons:
+Only forward traversal
+No size(), no reverse iterators
+Use When: Lightweight list with one-directional traversal is enough.
+
+5. std::set / std::multiset
+Pros:
+Elements always sorted
+Fast lookup/insertion/removal (O(log n))
+Cons:
+No duplicate keys in set (allowed in multiset)
+Slower than unordered counterparts for lookup
+No random access
+Use When: Sorted order is important and duplicates may (or may not) be allowed.
+6. std::map / std::multimap
+Pros:
+Key-value storage with ordering
+Efficient ordered traversal
+Cons:
+Slower than unordered_map for lookup
+Multimap allows duplicate keys
+Use When: You need ordered key-value pairs or range queries.
+
+
+7. std::unordered_set / std::unordered_multiset
+Pros:
+Fast average lookup, insertion, deletion (O(1) average)
+Cons:
+No ordering
+Worst case: O(n) if many hash collisions
+Requires good hash function
+Use When: You need fast membership testing and don’t care about order.
+8. std::unordered_map / std::unordered_multimap
+Pros:
+Fast key-based lookup (O(1) average)
+More efficient than map when ordering isn’t needed
+Cons:
+No sorted order
+Iteration order is undefined
+Use When: You need a hash map and don't care about key order.
+
+
+
+
+
+https://www.quantstart.com/articles/C-Standard-Template-Library-Part-III-Algorithms
+
+
+Stored in header file <algorithm>
+
+Used for processing elements of a container. 
+STL algorithms are implemented as template functions and they operate with iterators.
+Stored in header file <algorithm>
+These algorithms may or may not modify the value/order of the elements in the container
+Classification:
+Non-modifying Algorithms – find(), search(), count()
+Modifying Algorithms – replace(), copy(), merge()
+Removing – remove(), unique()
+Mutating – reverse(), partition(), rotate()
+Sorting – sort(), partial_sort, stable_sort
+Sorted Range – merge(), binary_search(), set_union
+Numeric – inner_product(), partial_sum(), accumulate()
+
+
+
+To use these algorithms it is necessary to include the <algorithm> header file. For the numeric algorithms, it is necessary to include the <numeric> header file.  Categories are:
+
+Nonmodifying algorithms - Nonmodifying algorithms do not change the value of any element, nor do they modify the order in which the elements appear. 
+Modifying algorithms - Modifying algorithms are designed to alter the value of elements within a container. 
+Removal algorithms - Removal algorithms are, by definition, modifying algorithms, but they are designed to remove elements in a container or when copying into another container.
+Mutating algorithms - Once again, mutating algorithms are modifying algorithms, but they are designed specifically to modify the order of elements (e.g. a random shuffle or rotation).
+Sorting algorithms - Sorting algorithms are modifying algorithms specifically designed for efficient sorting of elements in a container (or into a range container).
+Sorted range algorithms - Sorted range algorithms are special sorting algorithms designed to function on a container which is already sorted according to a particular sorting criterion. This allows for greater efficiency.
+Numeric algorithms - Numeric algorithms are designed to work on numerical data in some fashion. The principal algorithm in this category is accumulate(), which allows mathematical operators to be applied to all elements in a container.
+
+
+
+Nonmodifying Algorithms
+for_each() 
+count() 
+count_if() 
+min_element() 
+max_element() 
+find() 
+find_if() 
+search_n() 
+search() 
+find_end()
+find_first_of() 
+adjacent_find() 
+equal()
+mismatch() 
+lexicographical_compare()
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main(int argc, char ** argv){
+    vector<int> v;
+
+   v.push_back( 23 );
+   v.push_back( -1 );
+   v.push_back( 9999 );
+   v.push_back( 0 );
+   v.push_back( 4 ); 
+
+   cout << "Vector element: \n ";
+   for(int iCt = 0; iCt< v.size(); iCt++ ){ 
+    	 cout << v[iCt] << "  ";  
+    } 
+//To find max element
+   vector<int>::iterator  iMax;
+   iMax = max_element(v.begin(), v.end() );
+   cout<<"\n Max element : "<<*iMax;
+
+// To sort vector elements
+   sort( v.begin(), v.end() );
+ 
+   cout << "After sorting: ";
+   for(int  iCt = 0; iCt < v.size(); iCt++ ) 
+              cout << v[iCt] << "  ";  
+ 
+// To search an element
+   if(binary_search( v.begin(), v.end(), 4 ) )
+	cout<<"\n Exists !!!"<<endl; 
+   else
+	cout<<"\n Not Exist !!!"<<endl;
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
