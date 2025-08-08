@@ -41,3 +41,72 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+
+#include <iostream>
+#include <string>
+#include <memory>
+
+// 1. Data class - Single Responsibility: Store Student Data
+class Student {
+private:
+    std::string name;
+    int marks1;
+    int marks2;
+
+public:
+    Student(const std::string& name, int m1, int m2)
+        : name(name), marks1(m1), marks2(m2) {
+    }
+
+    std::string getName() const { return name; }
+    int getMarks1() const { return marks1; }
+    int getMarks2() const { return marks2; }
+};
+
+// 2. Printer class - Single Responsibility: Presentation
+class StudentPrinter {
+public:
+    void printDetails(const Student& student) const {
+        std::cout << "Name: " << student.getName() << "\n";
+        std::cout << "Marks1: " << student.getMarks1() << "\n";
+        std::cout << "Marks2: " << student.getMarks2() << "\n";
+    }
+};
+
+// 3. Calculator class - Single Responsibility: Business logic
+class StudentCalculator {
+public:
+    double calculatePercentage(const Student& student) const {
+        return (student.getMarks1() + student.getMarks2()) / 2.0;
+    }
+};
+
+// 4. Repository class - Single Responsibility: Persistence
+class StudentRepository {
+public:
+    void addStudent(const Student& student) const {
+        // Simulate saving to database
+        std::cout << "Student " << student.getName() << " added to database.\n";
+    }
+};
+
+// ---- Example usage ----
+int main() {
+    Student student("John Doe", 80, 90);
+
+    StudentPrinter printer;
+    StudentCalculator calculator;
+    StudentRepository repository;
+
+    printer.printDetails(student);
+    std::cout << "Percentage: " << calculator.calculatePercentage(student) << "%\n";
+    repository.addStudent(student);
+
+    return 0;
+}
+
