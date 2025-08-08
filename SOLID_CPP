@@ -292,5 +292,77 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <memory>
+
+class Bird {
+public:
+    virtual void eat() const {
+        std::cout << "Bird is eating.\n";
+    }
+
+    virtual ~Bird() = default;
+};
+
+// Interface for flying behavior
+class IFlyable {
+public:
+    virtual void fly() const = 0;
+    virtual ~IFlyable() = default;
+};
+
+class Crow : public Bird, public IFlyable {
+public:
+    void fly() const override {
+        std::cout << "Crow is flying.\n";
+    }
+
+    void eat() const override {
+        std::cout << "Crow is eating.\n";
+    }
+};
+
+class Ostrich : public Bird {
+public:
+    void eat() const override {
+        std::cout << "Ostrich is eating.\n";
+    }
+
+    // No fly() here — does not implement IFlyable
+};
+
+void letTheBirdsFly(const std::vector<std::shared_ptr<IFlyable>>& flyingBirds) {
+    for (const auto& b : flyingBirds) {
+        b->fly();
+    }
+}
+
+int main() {
+    std::vector<std::shared_ptr<IFlyable>> flyingBirds;
+    flyingBirds.push_back(std::make_shared<Crow>());
+
+    std::cout << "--- Flying Birds ---\n";
+    letTheBirdsFly(flyingBirds);
+
+    std::vector<std::shared_ptr<Bird>> allBirds;
+    allBirds.push_back(std::make_shared<Crow>());
+    allBirds.push_back(std::make_shared<Ostrich>());
+
+    std::cout << "\n--- All Birds Eating ---\n";
+    for (const auto& bird : allBirds) {
+        bird->eat();
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
 
 
