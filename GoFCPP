@@ -234,3 +234,104 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <memory>
+
+// Forward declaration
+class Circle;
+class Rectangle;
+
+// Visitor Interface
+class ShapeVisitor {
+public:
+    virtual void visit(Circle& c) = 0;
+    virtual void visit(Rectangle& r) = 0;
+    virtual ~ShapeVisitor() = default; //This tells the compiler to generate the default destructor. It behaves just like a compiler-generated destructor but explicitly defined in your code.
+};
+
+// Element Interface
+class Shape {
+public:
+    virtual void accept(ShapeVisitor& visitor) = 0;
+    virtual ~Shape() = default;
+};
+
+// Concrete Element: Circle
+class Circle : public Shape {
+public:
+    Circle(double r) : radius(r) {}
+    double getRadius() const { return radius; }
+    void accept(ShapeVisitor& visitor) override {
+        visitor.visit(*this);
+    }
+private:
+    double radius;
+};
+
+// Concrete Element: Rectangle
+class Rectangle : public Shape {
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+    double getWidth() const { return width; }
+    double getHeight() const { return height; }
+    void accept(ShapeVisitor& visitor) override {
+        visitor.visit(*this);
+    }
+private:
+    double width, height;
+};
+
+// Concrete Visitor: Area Calculator
+class AreaCalculator : public ShapeVisitor {
+public:
+    void visit(Circle& c) override {
+        double area = 3.14159 * c.getRadius() * c.getRadius();
+        std::cout << "Circle Area: " << area << std::endl;
+    }
+    void visit(Rectangle& r) override {
+        double area = r.getWidth() * r.getHeight();
+        std::cout << "Rectangle Area: " << area << std::endl;
+    }
+};
+
+// Concrete Visitor: Description Printer
+class DescriptionPrinter : public ShapeVisitor {
+public:
+    void visit(Circle& c) override {
+        std::cout << "This is a Circle with radius " << c.getRadius() << std::endl;
+    }
+    void visit(Rectangle& r) override {
+        std::cout << "This is a Rectangle with width " << r.getWidth()
+            << " and height " << r.getHeight() << std::endl;
+    }
+};
+
+// Main Function
+int main() {
+    std::vector<std::shared_ptr<Shape>> shapes;
+    shapes.push_back(std::make_shared<Circle>(5.0));
+    shapes.push_back(std::make_shared<Rectangle>(4.0, 3.0));
+
+    AreaCalculator areaVisitor;
+    DescriptionPrinter descVisitor;
+
+    std::cout << "----Descriptions----" << std::endl;
+    for (auto& shape : shapes)
+        shape->accept(descVisitor);
+
+    std::cout << "\n----Areas----" << std::endl;
+    for (auto& shape : shapes)
+        shape->accept(areaVisitor);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
