@@ -110,3 +110,118 @@ int main() {
     return 0;
 }
 
+
+
+
+
+
+
+#include <iostream>
+#include <memory>
+
+class Vehicle {
+public:
+    virtual double getNumber() const = 0;
+    virtual ~Vehicle() = default;
+};
+
+class Car : public Vehicle {
+public:
+    double getNumber() const override {
+        return 1234;
+    }
+};
+
+class Bike : public Vehicle {
+public:
+    double getNumber() const override {
+        return 5678;
+    }
+};
+
+class VehicleInfo {
+public:
+    double vehicleNumber(std::shared_ptr<Vehicle> vcl) {
+        // Not in OCP - requires modification to add support for new vehicle types
+        if (dynamic_cast<Car*>(vcl.get())) {
+            return vcl->getNumber();
+        }
+        if (dynamic_cast<Bike*>(vcl.get())) {
+            return vcl->getNumber();
+        }
+        return -1; // default case
+    }
+};
+
+int main() {
+    std::shared_ptr<Vehicle> car = std::make_shared<Car>();
+    std::shared_ptr<Vehicle> bike = std::make_shared<Bike>();
+
+    VehicleInfo info;
+    std::cout << "Car Number: " << info.vehicleNumber(car) << std::endl;
+    std::cout << "Bike Number: " << info.vehicleNumber(bike) << std::endl;
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include <memory>
+#include <vector>
+
+// Base class (open for extension)
+class Vehicle {
+public:
+    virtual double getNumber() const = 0;
+    virtual ~Vehicle() = default;
+};
+
+// Concrete classes (new types can be added without changing existing code)
+class Car : public Vehicle {
+public:
+    double getNumber() const override {
+        return 1234;
+    }
+};
+
+class Bike : public Vehicle {
+public:
+    double getNumber() const override {
+        return 5678;
+    }
+};
+
+// VehicleInfo doesn't care what kind of Vehicle it is
+class VehicleInfo {
+public:
+    double vehicleNumber(const Vehicle& vcl) {
+        return vcl.getNumber();
+    }
+};
+
+int main() {
+    VehicleInfo info;
+
+    // Create various vehicles
+    std::vector<std::shared_ptr<Vehicle>> vehicles = {
+        std::make_shared<Car>(),
+        std::make_shared<Bike>()
+    };
+
+    // Display vehicle numbers
+    for (const auto& v : vehicles) {
+        std::cout << "Vehicle Number: " << info.vehicleNumber(*v) << std::endl;
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
