@@ -104,3 +104,60 @@ int main() {
 
 
 
+
+
+
+#include <iostream>
+#include <memory>
+#include <string>
+using namespace std;
+
+// Subject Interface
+class Account {
+public:
+    virtual void accessAccount() = 0;
+    virtual ~Account() {}
+};
+
+// Real Subject
+class BankAccount : public Account {
+    string owner;
+public:
+    BankAccount(string o) : owner(o) {}
+    void accessAccount() override {
+        cout << "Access granted to " << owner << "'s bank account.\n";
+    }
+};
+
+// Proxy
+class BankAccountProxy : public Account {
+    shared_ptr<BankAccount> realAccount;
+    string password;
+public:
+    BankAccountProxy(shared_ptr<BankAccount> acct, string pwd)
+        : realAccount(acct), password(pwd) {
+    }
+
+    void accessAccount() override {
+        string input;
+        cout << "Enter password to access account: ";
+        cin >> input;
+        if (input == password) {
+            realAccount->accessAccount();
+        }
+        else {
+            cout << "Access Denied: Invalid password.\n";
+        }
+    }
+};
+
+// Main Client
+int main() {
+    shared_ptr<BankAccount> real = make_shared<BankAccount>("Alice");
+    BankAccountProxy proxy(real, "1234");
+
+    proxy.accessAccount(); // Try with 1234 or wrong password
+    return 0;
+}
+
+
