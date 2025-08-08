@@ -630,3 +630,91 @@ int main() {
 
 
 
+
+
+
+
+#include <iostream>
+#include <fstream>
+#include <stdexcept>
+#include <string>
+
+// Custom exception inheriting from std::exception
+class FileOpenException : public std::exception {
+    std::string msg;
+public:
+    explicit FileOpenException(const std::string& file)
+        : msg("Failed to open file: " + file) {}
+
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+// RAII class for demo
+class ResourceHandler {
+public:
+    ResourceHandler() {
+        std::cout << "[ResourceHandler] Acquiring resource.\n";
+        // simulate allocation or open resource
+    }
+
+    ~ResourceHandler() noexcept {
+        std::cout << "[ResourceHandler] Releasing resource.\n";
+        try {
+            // Cleanup that may throw - safely caught
+            // simulate cleanup
+        } catch (...) {
+            std::cerr << "Exception in destructor suppressed.\n";
+        }
+    }
+};
+
+// Function that throws standard exception
+int divide(int a, int b) {
+    if (b == 0) {
+        throw std::invalid_argument("Division by zero");
+    }
+    return a / b;
+}
+
+// Function that throws custom exception
+void openFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        throw FileOpenException(filename);
+    }
+    std::cout << "[openFile] File opened successfully.\n";
+}
+
+// Main application logic
+void runApp() {
+    ResourceHandler handler; // automatic cleanup
+
+    std::cout << "[runApp] Trying to divide...\n";
+    int result = divide(10, 0); // triggers std::invalid_argument
+    std::cout << "Result: " << result << '\n';
+
+    std::cout << "[runApp] Trying to open file...\n";
+    openFile("non_existing_file.txt"); // triggers FileOpenException
+}
+
+int main() {
+    try {
+        runApp();
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "[main] Invalid argument: " << e.what() << '\n';
+    } catch (const FileOpenException& e) {
+        std::cerr << "[main] File open error: " << e.what() << '\n';
+    } catch (const std::exception& e) {
+        std::cerr << "[main] General error: " << e.what() << '\n';
+    } catch (...) {
+        std::cerr << "[main] Unknown exception caught!\n";
+    }
+
+    std::cout << "[main] Application finished safely.\n";
+    return 0;
+}
+
+
+
