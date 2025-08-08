@@ -411,6 +411,65 @@ int main() {
 
 
 
+#include <iostream>
+#include <memory>
+// Forward declaration
+class FanState;
+// Context
+class Fan {
+    std::shared_ptr<FanState> state;
+public:
+    Fan(std::shared_ptr<FanState> initialState) : state(initialState) {}
+    void setState(std::shared_ptr<FanState> newState) { state = newState; }
+    void pressButton();
+};
+// State Interface
+class FanState {
+public:
+    virtual void handle(Fan& fan) = 0;
+    virtual ~FanState() = default;
+};
+// Forward declarations of concrete states (to break circular dependency)
+class FanOn;
+class FanOff;
+// Concrete State: FanOn
+class FanOn : public FanState {
+public:
+    void handle(Fan& fan) override;
+};
+// Concrete State: FanOff
+class FanOff : public FanState {
+public:
+    void handle(Fan& fan) override;
+};
+// Define method after both concrete classes are known
+void FanOn::handle(Fan& fan) {
+    std::cout << "Fan is turning OFF\n";
+    fan.setState(std::make_shared<FanOff>());
+}
+void FanOff::handle(Fan& fan) {
+    std::cout << "Fan is turning ON\n";
+    fan.setState(std::make_shared<FanOn>());
+}
+// Context method
+void Fan::pressButton() {
+    state->handle(*this);
+}
+// Main function
+int main() {
+    std::shared_ptr<FanState> initialState = std::make_shared<FanOff>();
+    Fan fan(initialState);
+    fan.pressButton(); // Fan is turning ON
+    fan.pressButton(); // Fan is turning OFF
+    fan.pressButton(); // Fan is turning ON
+    return 0;
+}
+
+
+
+
+
+
 
 
 
