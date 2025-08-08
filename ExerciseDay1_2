@@ -185,3 +185,81 @@ Apply operations like bonus or tax without modifying Employee.
 Step:
 Define Visitor interface and concrete visitors.
 
+
+
+
+
+
+
+
+
+
+Exercise: Employee Management System (Console-Based) using Modern C++:
+
+Re design the exercise such that it follows SOLID principles: SRP, OCP, LSP, ISP, DIP
+✅ S — Single Responsibility Principle (SRP)
+Each class should have one and only one reason to change.
+🔹 Steps:
+Separate classes by responsibility:
+Create a class Employee for storing employee data only.
+Create a class EmployeePrinter to handle all printing/display logic.
+Create a class EmployeeRepository to handle storage and data access (like add, remove, find).
+Create a class EmployeeSorter to sort employees.
+Create a class EmployeeAnalyzer to perform any analytics (like highest salary, count by department).
+ 
+✅ O — Open/Closed Principle (OCP)
+Software entities should be open for extension but closed for modification.
+🔹 Steps:
+Use polymorphism via abstract base classes or interfaces.
+Define an abstract class ISorter with a method sort(std::vector<std::unique_ptr<Employee>>& employees).
+Create SortBySalary, SortByName, etc., that inherit from ISorter.
+To add new sorting logic (e.g., sort by Department), you can just add a new class without touching existing code.
+ 
+✅ L — Liskov Substitution Principle (LSP)
+Derived classes must be substitutable for their base classes.
+🔹 Steps:
+When using inheritance (e.g., if you create specialized employees: Manager, Intern, etc.), ensure:
+All derived classes override behavior safely.
+They do not break the expectations of base class consumers.
+Example: Employee should define a virtual getRole() method, and all derived classes must return valid, consistent data.
+ 
+✅ I — Interface Segregation Principle (ISP)
+Clients should not be forced to depend on interfaces they don’t use.
+🔹 Steps:
+Split fat interfaces:
+Instead of having one class with too many responsibilities, split interfaces:
+IPrintable
+ISortable
+ISearchable
+Let classes only implement what they need.
+Use templates or abstract base classes for interfaces in C++.
+ 
+✅ D — Dependency Inversion Principle (DIP)
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+🔹 Steps:
+Define interfaces/abstract classes like IRepository, ISorter, etc.
+Inject these into high-level classes (like EmployeeManager) via constructor or setter.
+Use dependency injection pattern to pass dependencies.
+class EmployeeManager {
+private:
+    std::shared_ptr<IRepository> repo;
+    std::shared_ptr<ISorter> sorter;
+public:
+    EmployeeManager(std::shared_ptr<IRepository> r, std::shared_ptr<ISorter> s)
+        : repo(std::move(r)), sorter(std::move(s)) {}
+};
+ 
+🔧 Bonus: Useful STL and Modern C++ Features to Combine
+std::function and lambdas to inject logic.
+std::transform, std::accumulate, std::for_each for analytics and transformations.
+std::set, std::map, etc., to organize employees by department or role.
+ 
+🔄 Final Architecture (High-Level Classes)
+Employee – Core data model.
+EmployeeRepository – Stores and manages employees.
+EmployeePrinter – Responsible for display.
+EmployeeSorter – Sorts employees using strategy pattern.
+IRepository / ISorter – Abstract base interfaces.
+EmployeeManager – Orchestrates all logic and delegates work.
+ 
+
