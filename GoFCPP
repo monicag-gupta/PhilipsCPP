@@ -1,0 +1,25 @@
+#include<iostream>
+using namespace std;
+class System {
+private:
+    string s;
+    System(string ss) { s = ss; }
+public:
+    static System& getInstance(string ss) {
+        static System theInstance(ss);
+        return theInstance;
+    }
+    void prn() {
+        std::cout << s << " says this works!\n";
+    }
+};
+int main() {
+    System& sys1 = System::getInstance("sys1");
+    sys1.prn();
+    System& sys2 = System::getInstance("sys2"); //not created again
+    sys2.prn();
+    if (&sys1 == &sys2)
+        cout << "Equal";
+    else
+        cout << "Not equal";
+}
