@@ -132,3 +132,56 @@ std::transform(employees.begin(), employees.end(), std::back_inserter(salaries),
 });
 std::sort(salaries.begin(), salaries.end());
 
+
+
+
+
+
+
+
+
+Goal: Add Design Patterns to Your Employee Management System
+Design Patterns to Implement:
+Strategy Pattern – Flexible sorting or payroll computation strategies
+Observer Pattern – Notify HR when high-salary employees are added
+Factory Pattern – Encapsulate employee creation logic
+Singleton Pattern – Central payroll manager or configuration
+Visitor Pattern – Perform operations like bonus distribution, tax deduction, etc.
+1. Strategy Pattern
+Goal:
+Dynamically choose sorting strategy (by name, by salary, etc.) at runtime.
+Step:
+Define a strategy interface.
+Implement multiple strategies.
+Inject the strategy dynamically.
+
+2. Observer Pattern
+Goal:
+Notify HR or logger when high-salary employee is added.
+
+Step:
+Create Observer interface and concrete observer (e.g., HRLogger).
+
+Subject class is EmployeeManager.
+
+3. Factory Pattern
+Goal:
+Encapsulate creation of different types of Employees.
+
+Step:
+Create abstract factory method and concrete types.
+
+4. Singleton Pattern
+Goal:
+Ensure one central PayrollManager exists.
+
+Step:
+Private constructor + static getInstance method.
+
+5. Visitor Pattern
+Goal:
+Apply operations like bonus or tax without modifying Employee.
+
+Step:
+Define Visitor interface and concrete visitors.
+
