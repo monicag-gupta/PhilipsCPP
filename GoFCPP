@@ -333,6 +333,90 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <memory>
+
+// Strategy Interface
+class SortStrategy {
+public:
+    virtual void sort(std::vector<int>& data) = 0;
+    virtual ~SortStrategy() {}
+};
+
+// Concrete Strategy A: Ascending Sort
+class AscendingSort : public SortStrategy {
+public:
+    void sort(std::vector<int>& data) override {
+        std::sort(data.begin(), data.end());
+        std::cout << "Sorted in Ascending Order.\n";
+    }
+};
+
+// Concrete Strategy B: Descending Sort
+class DescendingSort : public SortStrategy {
+public:
+    void sort(std::vector<int>& data) override {
+        std::sort(data.begin(), data.end(), std::greater<int>());
+        std::cout << "Sorted in Descending Order.\n";
+    }
+};
+
+// Context Class
+class SortContext {
+private:
+    std::unique_ptr<SortStrategy> strategy;
+public:
+    void setStrategy(std::unique_ptr<SortStrategy> s) {
+        strategy = std::move(s);
+    }
+
+    void executeStrategy(std::vector<int>& data) {
+        if (strategy)
+            strategy->sort(data);
+        else
+            std::cout << "No strategy set!\n";
+    }
+};
+
+// Helper function to print vector
+void printVector(const std::vector<int>& data) {
+    for (int num : data)
+        std::cout << num << " ";
+    std::cout << "\n";
+}
+
+int main() {
+    std::vector<int> numbers = { 5, 2, 9, 1, 7 };
+
+    SortContext context;
+
+    std::cout << "Original data: ";
+    printVector(numbers);
+
+    context.setStrategy(std::make_unique<AscendingSort>());
+    context.executeStrategy(numbers);
+    printVector(numbers);
+
+    context.setStrategy(std::make_unique<DescendingSort>());
+    context.executeStrategy(numbers);
+    printVector(numbers);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
