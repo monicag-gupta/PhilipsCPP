@@ -1,0 +1,27 @@
+Problem Statement:
+Create a Notification System using the Factory Pattern. The system supports three types of notifications:
+EmailNotification
+SMSNotification
+PushNotification
+Each notification has:
+A recipient (email address, phone number, or device ID),
+A message,
+A method called notify() that sends the message.
+Use the Factory Pattern to create notification objects dynamically based on a string type ("email", "sms", "push").
+
+
+
+
+
+
+Implement a Logger system using the Singleton Pattern. The Logger class should:
+Be instantiated only once.
+Log messages with timestamps.
+Support different log levels: INFO, WARNING, ERROR.
+Store the log history and allow printing all logs.
+
+
+
+
+
+
