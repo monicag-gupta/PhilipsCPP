@@ -21,6 +21,16 @@ Support different log levels: INFO, WARNING, ERROR.
 Store the log history and allow printing all logs.
 
 
+Develope a payment system that can pay using different methods — Credit Card, PayPal, and Crypto. 
+We want to select the strategy at runtime.
+Strategy Pattern Components :
+Strategy Interface: PaymentStrategy
+Concrete Strategies: CreditCardPayment, PayPalPayment, CryptoPayment
+Context Class: PaymentContext
+
+
+
+
 
 
 
