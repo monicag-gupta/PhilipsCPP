@@ -482,4 +482,104 @@ int main() {
 
 
 
+#include <iostream>
+
+class BackEndDeveloper {
+public:
+    void writeJava() {
+        std::cout << "Writing Java code...\n";
+    }
+};
+
+class FrontEndDeveloper {
+public:
+    void writeJavascript() {
+        std::cout << "Writing JavaScript code...\n";
+    }
+};
+
+class Project {
+private:
+    BackEndDeveloper backendDev;
+    FrontEndDeveloper frontendDev;
+
+public:
+    void implement() {
+        backendDev.writeJava();
+        frontendDev.writeJavascript();
+    }
+};
+
+int main() {
+    Project project;
+    project.implement();
+    return 0;
+}
+
+
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <memory>
+
+// Abstraction
+class IDeveloper {
+public:
+    virtual void develop() = 0;
+    virtual ~IDeveloper() = default;
+};
+
+// Low-level module 1
+class BackEndDeveloper : public IDeveloper {
+public:
+    void develop() override {
+        std::cout << "Writing Java code...\n";
+    }
+};
+
+// Low-level module 2
+class FrontEndDeveloper : public IDeveloper {
+public:
+    void develop() override {
+        std::cout << "Writing JavaScript code...\n";
+    }
+};
+
+// High-level module
+class Project {
+private:
+    std::vector<std::shared_ptr<IDeveloper>> developers;
+
+public:
+    void addDeveloper(const std::shared_ptr<IDeveloper>& dev) {
+        developers.push_back(dev);
+    }
+
+    void implement() {
+        for (const auto& dev : developers) {
+            dev->develop();
+        }
+    }
+};
+
+// Main
+int main() {
+    std::shared_ptr<IDeveloper> backend = std::make_shared<BackEndDeveloper>();
+    std::shared_ptr<IDeveloper> frontend = std::make_shared<FrontEndDeveloper>();
+
+    Project project;
+    project.addDeveloper(backend);
+    project.addDeveloper(frontend);
+
+    project.implement();
+
+    return 0;
+}
+
+
+
 
