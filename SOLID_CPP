@@ -224,4 +224,73 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <stdexcept>
+
+class Bird {
+public:
+    virtual void fly() {
+        std::cout << "Bird is flying" << std::endl;
+    }
+
+    virtual void eat() {
+        std::cout << "Bird is eating" << std::endl;
+    }
+
+    virtual ~Bird() = default;
+};
+
+class Crow : public Bird {
+public:
+    void fly() override {
+        std::cout << "Crow is flying" << std::endl;
+    }
+
+    void eat() override {
+        std::cout << "Crow is eating" << std::endl;
+    }
+};
+
+class Ostrich : public Bird {
+public:
+    void fly() override {
+        // Violation: Ostrich can't fly but is forced to implement it.
+        throw std::runtime_error("Ostrich can't fly!");
+    }
+
+    void eat() override {
+        std::cout << "Ostrich is eating" << std::endl;
+    }
+};
+
+void letTheBirdsFly(const std::vector<std::shared_ptr<Bird>>& birds) {
+    for (const auto& bird : birds) {
+        bird->fly(); // Will throw error for Ostrich
+    }
+}
+
+int main() {
+    std::vector<std::shared_ptr<Bird>> birds;
+    birds.push_back(std::make_shared<Bird>());
+    birds.push_back(std::make_shared<Crow>());
+    birds.push_back(std::make_shared<Ostrich>()); // Not substitutable for Bird in flying
+
+    try {
+        letTheBirdsFly(birds);
+    } catch (const std::exception& e) {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
 
