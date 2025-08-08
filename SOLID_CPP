@@ -587,3 +587,46 @@ int main() {
 
 
 
+#include <iostream>
+#include <string>
+// ------------------- Logging Policies -------------------
+// Policy 1: Logs to console
+struct ConsoleLogger {
+    void log(const std::string& message) const {
+        std::cout << "[ConsoleLogger] " << message << std::endl;
+    }
+};
+// Policy 2: Does nothing (silent)
+struct NullLogger {
+    void log(const std::string& message) const {
+        // No output
+    }
+};
+// ------------------- Worker Class with Policy -------------------
+template <typename LoggerPolicy>
+class Worker : public LoggerPolicy {
+public:
+    void doWork() {
+        this->log("Work started.");
+
+        // Simulate work
+        for (int i = 1; i <= 3; ++i) {
+            this->log("Working step " + std::to_string(i));
+        }
+
+        this->log("Work completed.");
+    }
+};
+// ------------------- Main -------------------
+int main() {
+    std::cout << "=== Using ConsoleLogger ===" << std::endl;
+    Worker<ConsoleLogger> w1;
+    w1.doWork();
+    std::cout << "\n=== Using NullLogger ===" << std::endl;
+    Worker<NullLogger> w2;
+    w2.doWork(); // Silent, does not log
+}
+
+
+
+
