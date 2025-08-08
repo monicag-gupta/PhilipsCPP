@@ -362,6 +362,123 @@ int main() {
 
 
 
+// Conversion.cpp
+
+#include <iostream>
+
+class Conversion {
+public:
+    virtual void intToDouble() = 0;
+    virtual void intToChar() = 0;
+    virtual void charToString() = 0;
+    virtual ~Conversion() = default;
+};
+
+class IntConversion : public Conversion {
+public:
+    void intToDouble() override {
+        std::cout << "intToDouble logic\n";
+    }
+
+    void intToChar() override {
+        std::cout << "intToChar logic\n";
+    }
+
+    void charToString() override {
+        // Not applicable, but forced to implement
+        std::cout << "charToString() not supported in IntConversion\n";
+    }
+};
+
+class CharConversion : public Conversion {
+public:
+    void intToDouble() override {
+        // Not applicable, but forced to implement
+        std::cout << "intToDouble() not supported in CharConversion\n";
+    }
+
+    void intToChar() override {
+        // Not applicable
+        std::cout << "intToChar() not supported in CharConversion\n";
+    }
+
+    void charToString() override {
+        std::cout << "charToString logic\n";
+    }
+};
+
+int main() {
+    IntConversion intConv;
+    CharConversion charConv;
+
+    intConv.intToDouble();
+    intConv.charToString();  // Forced implementation
+
+    charConv.charToString();
+    charConv.intToDouble();  // Forced implementation
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+
+// Segregated Interfaces
+class IIntToDouble {
+public:
+    virtual void intToDouble() = 0;
+    virtual ~IIntToDouble() = default;
+};
+
+class IIntToChar {
+public:
+    virtual void intToChar() = 0;
+    virtual ~IIntToChar() = default;
+};
+
+class ICharToString {
+public:
+    virtual void charToString() = 0;
+    virtual ~ICharToString() = default;
+};
+
+// Implements only what's needed
+class IntConversion : public IIntToDouble, public IIntToChar {
+public:
+    void intToDouble() override {
+        std::cout << "Converting int to double\n";
+    }
+
+    void intToChar() override {
+        std::cout << "Converting int to char\n";
+    }
+};
+
+// Implements only what's needed
+class CharConversion : public ICharToString {
+public:
+    void charToString() override {
+        std::cout << "Converting char to string\n";
+    }
+};
+
+int main() {
+    IntConversion intConv;
+    CharConversion charConv;
+
+    intConv.intToDouble();
+    intConv.intToChar();
+
+    charConv.charToString();
+
+    return 0;
+}
+
+
+
 
 
 
