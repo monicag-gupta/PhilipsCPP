@@ -79,3 +79,31 @@ int main() {
 
 
 
+
+
+
+#include <iostream>
+#include <thread> // includes std::jthread
+#include <chrono>
+
+void work(int id) {
+    std::cout << "Thread " << id << " starting...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "Thread " << id << " finished.\n";
+}
+
+int main() {
+    std::jthread jt1(work, 1); // Automatically joins
+    std::jthread jt2(work, 2); // No join() needed
+
+    std::cout << "Main thread continuing...\n";
+    return 0;
+}
+
+
+
+
+
+
+
+
