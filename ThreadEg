@@ -484,6 +484,54 @@ int main() {
 
 
 
+#include <iostream>
+#include <thread>
+#include <future>
+#include <vector>
+#include <chrono>
+// Producer function
+void produceValue(int producerId, std::promise<int> p) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500 * producerId));
+    int value = producerId * 100;
+    std::cout << "[Producer " << producerId << "] Setting value: " << value << "\n";
+    p.set_value(value);
+}
+// Consumer function
+void consumeValue(std::shared_future<int> sf, int consumerId, int producerId) {
+    std::cout << "[Consumer " << consumerId << "] Waiting for value from Producer " << producerId << "...\n";
+    int value = sf.get();
+    std::cout << "[Consumer " << consumerId << "] Received from Producer " << producerId << ": " << value << "\n";
+}
+int main() {
+    const int numProducers = 2;
+    const int numConsumers = 3;
+    // One promise+shared_future for each producer
+    std::vector<std::promise<int>> promises(numProducers);
+    std::vector<std::shared_future<int>> sharedFutures;
+    for (auto& p : promises) {
+        std::future<int> fut = p.get_future();
+        sharedFutures.push_back(fut.share());
+    }
+    // Start producers
+    std::vector<std::thread> producers;
+    for (int i = 0; i < numProducers; ++i) {
+        producers.emplace_back(produceValue, i + 1, std::move(promises[i]));
+    }
+    // Start consumers for each producer
+    std::vector<std::thread> consumers;
+    for (int pid = 0; pid < numProducers; ++pid) {
+        for (int cid = 1; cid <= numConsumers; ++cid) {
+            consumers.emplace_back(consumeValue, sharedFutures[pid], cid, pid + 1);
+        }
+    }
+    // Join all threads
+    for (auto& t : producers) t.join();
+    for (auto& t : consumers) t.join();
+    return 0;
+}
+
+
+
 
 
 
