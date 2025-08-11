@@ -1,0 +1,140 @@
+#include <iostream>
+using namespace std;
+template <class T>
+class mypair {
+    T a, b;
+public:
+    mypair(T first, T second)
+    {
+        a = first; b = second;
+    }
+    T getmax() {
+        T retval;
+        retval = a > b ? a : b;
+        return retval;
+    }
+};
+int main() {
+    mypair <int> myobject(100, 75);
+    cout << myobject.getmax();
+    return 0;
+}
+
+
+
+
+
+
+
+#include<iostream>
+using namespace std;
+template<class T, class U>
+class A {
+	T x;
+	U y;
+      public:
+	A() { cout << "Constructor Called" << endl; }
+};
+int main() {
+	A<char, char> a;
+	A<int, double> b;
+	return 0;
+}
+//Exercise: tell about the datatype  of x, y by using RTTI:Constructor called with datatype: char, char : typeid(x).name()
+
+
+
+
+
+
+#include<iostream>
+using namespace std;
+template<class T, class U = char>
+class A {
+    public:
+	T x;
+	U y;
+	A() { cout << "Constructor Called" << endl; }
+};
+int main() {
+	A<char> a;  // This will call A<char, char> 
+	A<int, double> b; // This will call A<int, double> 
+  
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+constexpr means "evaluated at compile time if possible".
+It tells the compiler:
+This variable / function can be evaluated at compile time.
+If the arguments are all constant expressions, the result is computed during compilation.
+Otherwise, it’s still valid at runtime.
+constexpr with Variables
+A constexpr variable must be initialized with a compile-time constant.
+constexpr with Functions
+A constexpr function can run:
+At compile time if called with constant arguments.
+At runtime if called with non-constant arguments.
+constexpr Constructors and Objects
+You can make constructors constexpr so that objects can be created at compile time.
+constexpr enables compile-time evaluation but doesn’t force it for all calls.
+Great for constants, lookup tables, and computations that don’t need to be recomputed at runtime.
+Often combined with consteval in C++20 when you must compute at compile time.
+
+
+
+#include <iostream>
+#include <array>
+constexpr int square(int n) { //constexpr function
+    return n * n;
+} 
+// constexpr constructor & method
+struct Point {
+    int x, y;
+    constexpr Point(int a, int b) : x(a), y(b) {}
+    constexpr int getX() const { return x; }
+};
+int main() {
+    // constexpr with variables
+    constexpr int maxValue = 100;       // compile-time constant
+    constexpr double pi = 3.14159;      // compile-time constant
+    // int runtimeValue = 50;
+    // constexpr int invalidConstexpr = runtimeValue; // ERROR: not known at compile time
+
+    // constexpr with functions
+    constexpr int ctSquare = square(5); // compile-time evaluation
+    int num = 7;
+    int rtSquare = square(num);         // runtime evaluation
+
+    // constexpr constructors and objects
+    constexpr Point p1(3, 4); // compile-time object
+    Point p2(5, 6);           // runtime object
+
+    // constexpr vs const
+    const int constVar = 10;        // runtime constant (may be optimized)
+    constexpr int constExprVar = 20; // compile-time constant guaranteed
+
+    // Using constexpr in compile-time context (array size)
+    std::array<int, square(4)> arr; // size = 16 at compile time
+
+    // Output results
+    std::cout << "1. Constexpr Variables: maxValue = " << maxValue << ", pi = " << pi << "\n";
+    std::cout << "2️. Constexpr Functions: ctSquare (compile-time) = " << ctSquare
+        << ", rtSquare (runtime) = " << rtSquare << "\n";
+    std::cout << "3️. Constexpr Objects: p1.x = " << p1.getX() << ", p2.x = " << p2.getX() << "\n";
+    std::cout << "4️. Const vs Constexpr: constVar = " << constVar
+        << ", constExprVar = " << constExprVar << "\n";
+    std::cout << "Array size using constexpr = " << arr.size() << "\n";
+}
+
+
+
+
+
