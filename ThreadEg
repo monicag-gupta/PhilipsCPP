@@ -149,7 +149,7 @@ void increment(int id) {
     for (int i = 0; i < 5; ++i) {
         mtx.lock(); // Lock before accessing shared data
         ++counter;
-        std::cout << "Thread " << id << " incremented counter to " << counter << "\n";
+        std::cout << "Thread " << id << " incremented counter to " << counter << "at iteration: " << i << "\n";
         mtx.unlock(); // Unlock after use
     }
 }
@@ -160,6 +160,8 @@ int main() {
     t2.join();
     std::cout << "Final counter value: " << counter << "\n";
 }
+
+
 
 
 
