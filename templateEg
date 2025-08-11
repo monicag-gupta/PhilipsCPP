@@ -246,3 +246,49 @@ int main()
 
 
 
+Passing variable number of arguments
+
+Variable number of parameters has two parts:
+an int which will represent the total number variable arguments passed
+And last argument as ellipses, i.e. three dotes (...) representing the variable number of parameters 
+To use such functionality, you need to make use of stdarg.h header file which provides the functions and macros to implement the functionality of variable arguments:
+va_list type variable representing the variable list
+va_start macro to initialize the va_list variable to an argument list
+va_arg macro to access each item in argument list
+macro va_end to clean up the memory assigned to va_list variable
+
+
+
+
+/* va_arg example */
+#include <stdio.h>      /* printf */
+#include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
+
+int FindMax (int n, ...)
+{
+  int i,val,largest=0;
+  va_list vl;
+  va_start(vl,n);
+ // largest=va_arg(vl,int);
+  for (i=0;i<n;i++)
+  {
+    val=va_arg(vl,int);
+    largest=(largest>val)?largest:val;
+  }
+  va_end(vl);
+  return largest;
+}
+
+int main ()
+{
+  int m;
+  m= FindMax (7,702,422,631,834,892,104,772);
+  printf ("The largest value is: %d\n",m);
+  m= FindMax (3, 10, 80,35);
+  printf ("The largest value is: %d\n",m);
+  return 0;
+}
+
+
+
+
