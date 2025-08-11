@@ -97,8 +97,45 @@ int main() {
     std::jthread jt2(work, 2); // No join() needed
 
     std::cout << "Main thread continuing...\n";
+
+
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+void worker(std::stop_token stopToken, int id) {
+    while (!stopToken.stop_requested()) {
+        std::cout << "Thread " << id << " is working...\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+    std::cout << "Thread " << id << " stopping.\n";
+}
+
+int main() {
+    std::jthread jt(worker, 1);
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    jt.request_stop(); // Ask the thread to stop
+
+    // No need to call join() — automatic
+    std::cout << "Main finished.\n";
+}
+
+
 
 
 
