@@ -138,3 +138,75 @@ int main() {
 
 
 
+
+
+
+#include <iostream>
+#include <array>
+
+// -------------------- constexpr function --------------------
+constexpr int square(int n) {
+    return n * n;
+}
+
+// -------------------- consteval function --------------------
+consteval int cube(int n) {
+    return n * n * n;
+}
+
+// -------------------- constexpr constructor --------------------
+struct Point {
+    int x, y;
+    constexpr Point(int a, int b) : x(a), y(b) {}
+    constexpr int getX() const { return x; }
+    constexpr int getY() const { return y; }
+};
+
+int main() {
+    // -------------------- constexpr vs const variables --------------------
+    constexpr int constexprVar = 42; // Compile-time constant
+    const int constVar = 10;         // Runtime constant (value fixed after init)
+
+    int num = 7; // Runtime value
+
+    // -------------------- constexpr with functions --------------------
+    constexpr int ctSquare = square(5); // Compile-time evaluation
+    int rtSquare = square(num);         // Runtime evaluation (num not known at compile time)
+
+    // -------------------- consteval function usage --------------------
+    constexpr int ctCube = cube(3); // Must be compile-time
+    // int runtimeCube = cube(num);  // ERROR: consteval requires compile-time
+
+    // -------------------- constexpr constructor & objects --------------------
+    constexpr Point p1(3, 4); // Compile-time object
+    Point p2(5, 6);           // Runtime object
+
+    // -------------------- constexpr usage in array size --------------------
+    std::array<int, cube(2)> arr; // compile-time size (2^3 = 8)
+
+    // -------------------- Output results --------------------
+    std::cout << "=== Variables ===\n";
+    std::cout << "constexprVar = " << constexprVar << "\n";
+    std::cout << "constVar     = " << constVar << "\n";
+
+    std::cout << "\n=== constexpr function square() ===\n";
+    std::cout << "Compile-time square(5) = " << ctSquare << "\n";
+    std::cout << "Runtime square(num=7)  = " << rtSquare << "\n";
+
+    std::cout << "\n=== consteval function cube() ===\n";
+    std::cout << "Compile-time cube(3)   = " << ctCube << "\n";
+    // std::cout << "Runtime cube(num)     = " << runtimeCube << "\n"; // won't compile
+
+    std::cout << "\n=== constexpr Objects ===\n";
+    std::cout << "p1 (compile-time) X=" << p1.getX() << ", Y=" << p1.getY() << "\n";
+    std::cout << "p2 (runtime)      X=" << p2.getX() << ", Y=" << p2.getY() << "\n";
+
+    std::cout << "\n=== Array ===\n";
+    std::cout << "Array size from cube(2) = " << arr.size() << "\n";
+}
+
+
+
+
+
+
