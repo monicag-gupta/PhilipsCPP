@@ -263,3 +263,31 @@ IRepository / ISorter – Abstract base interfaces.
 EmployeeManager – Orchestrates all logic and delegates work.
  
 
+
+
+
+
+
+Steps for the Exercise
+Step 1: Identify Multithreading Use Cases
+We’ll simulate:
+Producer Threads: Adding employees to the system (e.g., from HR input).
+Consumer Threads: Processing employees (e.g., generating payroll).
+Shared data: std::vector<std::shared_ptr<Employee>> protected by a mutex.
+Step 2: Add Thread-Safe Data Access
+Use std::mutex to protect the shared employee container.
+Use std::condition_variable to coordinate producer/consumer.
+Step 3: Add Atomic Counters
+Keep track of the number of employees processed using std::atomic<int>.
+Step 4: Create Thread Functions
+Producer Function: Simulates adding employees after random delays.
+Consumer Function: Waits for new employees and processes them.
+Step 5: Manage Threads
+Launch multiple producers and consumers using std::thread.
+Join all threads before program exit.
+Step 6: Combine with Existing OOP + SOLID
+Use smart pointers for Employee storage (std::shared_ptr).
+Keep Employee classes and SRP intact — thread logic is separate from core business logic.
+ EmployeeManager also persists data to a file asynchronously. Uses std::async + std::future for background payroll calculation.
+
+
