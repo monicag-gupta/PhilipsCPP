@@ -278,6 +278,40 @@ int main() {
 
 
 
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <vector>
+#include <chrono>
+std::mutex mtx; // shared mutex
+int counter = 0;
+void incrementTask(int id) {
+    // Defer lock: Don't lock in constructor // Creates a lock object, but does not lock yet.
+    std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+    // Simulate some work before locking
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));    
+    lock.lock(); // Lock explicitly
+    ++counter;
+    std::cout << "Thread " << id << " incremented counter to " << counter << "\n";    
+    lock.unlock(); // Unlock early (before the scope ends)
+    // Do some more work without holding the lock
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));    
+    lock.lock(); // Lock again later if needed
+    std::cout << "Thread " << id << " did more work safely.\n";
+}
+int main() {
+    std::vector<std::thread> threads;
+    for (int i = 1; i <= 5; ++i)
+        threads.emplace_back(incrementTask, i);
+    for (auto& t : threads)
+        t.join();
+    std::cout << "Final counter value: " << counter << "\n";
+    return 0;
+}
+
+
+
+
 
 
 
