@@ -418,6 +418,85 @@ Works just like calling computeSum(10, 20) — except it happens on another thre
 
 
 
+#include <iostream>
+#include <thread>
+#include <future>
+#include <chrono>
+// Producer function
+void produceValue(std::promise<int> p) {
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // simulate work
+    std::cout << "[Producer] Setting the value...\n";
+    p.set_value(42); // send value to future
+}
+// Consumer function
+void consumeValue(std::future<int> f) {
+    std::cout << "[Consumer] Waiting for value...\n";
+    int value = f.get(); // blocks until value is set
+    std::cout << "[Consumer] Received value: " << value << "\n";
+}
+int main() {
+    std::promise<int> prom;             // Create promise
+    std::future<int> fut = prom.get_future(); // Get its future
+    std::thread producer(produceValue, std::move(prom)); // pass promise to producer
+    std::thread consumer(consumeValue, std::move(fut));  // pass future to consumer
+    producer.join();
+    consumer.join();
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include <thread>
+#include <future>
+#include <chrono>
+#include <vector>
+// Producer function
+void produceValue(std::promise<int> p) {
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // simulate work
+    std::cout << "[Producer] Setting the value...\n";
+    p.set_value(99); // send value to future
+}
+// Consumer function
+void consumeValue(std::shared_future<int> sf, int id) {
+    std::cout << "[Consumer " << id << "] Waiting for value...\n";
+    int value = sf.get(); // all consumers get the same value
+    std::cout << "[Consumer " << id << "] Received value: " << value << "\n";
+}
+int main() {
+    std::promise<int> prom;                 // Create promise
+    std::future<int> fut = prom.get_future(); // Get its future
+    // Convert to shared_future so multiple threads can call get()
+    std::shared_future<int> sf = fut.share();
+    // Create consumers
+    std::vector<std::thread> consumers;
+    for (int i = 1; i <= 3; ++i) 
+        consumers.emplace_back(consumeValue, sf, i);
+    // Create producer
+    std::thread producer(produceValue, std::move(prom));    
+    producer.join(); // Join threads
+    for (auto& t : consumers)  t.join();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
