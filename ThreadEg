@@ -190,6 +190,65 @@ int main() {
 
 
 
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex m1, m2;
+
+void task1() {
+    std::cout << "Task 1 begins\n";
+    std::lock_guard<std::mutex> lg1(m1);
+    std::cout << "Task 1 locks m1\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate work
+    std::lock_guard<std::mutex> lg2(m2); // Waits here if task2 has m2
+    std::cout << "Task 1 locks m2 in m1 locked\n";
+    std::cout << "Task 1 completed\n";
+}
+
+void task2() {
+    std::cout << "Task 2 begins\n";
+    std::lock_guard<std::mutex> lg2(m2);
+    std::cout << "Task 2 locks m2\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate work
+    std::lock_guard<std::mutex> lg1(m1); // Waits here if task1 has m1
+    std::cout << "Task 2 locks m1 in m2 locked\n";
+    std::cout << "Task 2 completed\n";
+}
+
+int main() {
+    std::thread t1(task1);
+    std::thread t2(task2);
+
+    t1.join();
+    t2.join();
+}
+
+
+
+
+
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+std::mutex m1, m2;
+void task1() {
+    std::scoped_lock lock(m1, m2); // Locks both without deadlock
+    std::cout << "Task1 acquired both locks\n";
+}
+void task2() {
+    std::scoped_lock lock(m1, m2); // Safe
+    std::cout << "Task2 acquired both locks\n";
+}
+int main() {
+    std::thread t1(task1);
+    std::thread t2(task2);
+    t1.join();
+    t2.join();
+}
+
+
 
 
 
