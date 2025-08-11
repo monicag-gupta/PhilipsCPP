@@ -359,3 +359,13 @@ int main() {
 
 
 
+std::atomic Operations:
+
+load() → Read value atomically.
+store(value) → Write value atomically.
+fetch_add(x) → Atomically add.
+fetch_sub(x) → Atomically subtract.
+exchange(x) → Atomically replace value.
+compare_exchange_strong(expected, desired) → Compare-and-swap.
+
+
