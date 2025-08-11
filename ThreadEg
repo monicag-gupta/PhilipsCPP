@@ -11,3 +11,30 @@ int main() {
     return 0;
 }
 
+
+
+
+
+#include <iostream>
+#include <thread>
+
+// A simple function for a thread
+void workerFunction(int id) {
+    std::cout << "Worker " << id << " is running on thread ID " 
+              << std::this_thread::get_id() << "\n";
+}
+
+int main() {
+    std::thread t1(workerFunction, 1);  // Start a thread
+    std::thread t2(workerFunction, 2);  // Start another
+
+    t1.join();  // Wait for t1 to finish
+    t2.join();  // Wait for t2 to finish
+
+    return 0;
+}
+
+
+
+
+
