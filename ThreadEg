@@ -1,0 +1,13 @@
+#include <iostream>
+#include <thread>
+
+int main() {
+    unsigned int n = std::thread::hardware_concurrency();
+    if (n == 0) {
+        std::cout << "Number of concurrent threads not detectable.\n";
+    } else {
+        std::cout << "System supports " << n << " concurrent threads.\n";
+    }
+    return 0;
+}
+
