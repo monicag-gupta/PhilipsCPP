@@ -313,6 +313,23 @@ int main() {
 
 
 
+#include <iostream>
+#include <thread>
+#include <vector>
+int counter = 0; // Not thread-safe
+void increment() {
+    for (int i = 0; i < 100000; ++i) {
+        counter++; // Race condition here
+    }
+}
+int main() {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 4; ++i)
+        threads.emplace_back(increment);
+    for (auto& t : threads)
+        t.join();
+    std::cout << "Counter: " << counter << "\n"; // Likely < 400000 due to lost updates
+}
 
 
 
