@@ -369,3 +369,66 @@ exchange(x) → Atomically replace value.
 compare_exchange_strong(expected, desired) → Compare-and-swap.
 
 
+
+
+
+
+
+
+#include <iostream>
+#include <future>
+#include <thread>
+#include <chrono>
+
+int computeSum(int a, int b) {
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // Simulate work
+    return a + b;
+}
+int main() {
+    // Launch a task and get a future
+    std::future<int> result = std::async(std::launch::async, computeSum, 10, 20);
+
+    std::cout << "Doing something else while sum is calculated...\n";
+
+    // Get the result (waits if not ready)
+    std::cout << "Sum is: " << result.get() << "\n";
+}
+
+
+
+
+
+
+Breaking it down
+std::future<int>
+A future represents a value that will be computed in the future.
+In this case, the value will be an int (because computeSum returns int).
+You’ll retrieve it later with result.get().
+std::async
+Launches a function asynchronously.
+Automatically handles thread creation and destruction.
+std::launch::async
+A launch policy telling C++ to definitely run the task in a separate thread right away.
+Without it, C++ might run the function lazily (only when get() is called).
+computeSum, 10, 20
+The function and its arguments.
+Works just like calling computeSum(10, 20) — except it happens on another thread.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
