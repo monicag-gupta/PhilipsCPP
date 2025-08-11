@@ -207,6 +207,42 @@ int main() {
 
 
 
+#include<iostream>
+using namespace std;
+template<typename T>
+constexpr T PI = T(3.1415926535897932385);
+int main()
+{
+    cout<<"PI:"<< PI<int><<endl;
+    cout << "PI:" << PI<double> << endl;
+    return 0;
+}
+//constexpr is compile time interference
+//constexpr can be used as an expression elsewhere also; sealed or final keyword in c#/java
+
+
+
+
+
+
+
+#include<iostream>
+using namespace std;
+template<typename T>
+T PI = T(3.1415926535897932385);
+template<typename T>
+T area(T r) {
+	return PI<T> * r * r;
+}
+int main()
+{
+	cout<<"PI:"<< PI<int><<"  area: "<<area(2)<<endl;
+	cout << "PI:" << PI<double> << "  area: " << area(2.0) << endl;
+	return 0;
+}
+
+
+
 
 
 
