@@ -252,6 +252,29 @@ int main() {
 
 
 
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <chrono>
+std::mutex mtx;
+void tryLockTask(int id) {
+    if (mtx.try_lock()) {
+        std::cout << "Thread " << id << " got the lock\n";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        mtx.unlock();
+    } else {
+        std::cout << "Thread " << id << " could not get the lock\n";
+    }
+}
+int main() {
+    std::thread t1(tryLockTask, 1);
+    std::thread t2(tryLockTask, 2);
+    t1.join();
+    t2.join();
+}
+
+
+
 
 
 
