@@ -479,4 +479,118 @@ int main() {
 
 
 
+Move Semantics in C++ is a performance optimization feature introduced in C++11 that allows resources from one object to be transferred (moved) to another object instead of being copied.
+This is especially useful for expensive-to-copy resources such as:
+Large strings
+Vectors
+File handles
+Dynamic memory
+ Why Move Semantics?
+When you copy an object:
+A new object is created with its own copy of the data.
+This often involves allocating memory and duplicating contents — which is slow.
+When you move an object:
+    The destination takes ownership of the source’s resources.
+    The source is left in a valid but empty state.
+    No deep copy is performed — only pointer values are swapped.
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+class BigData {
+public:
+    std::vector<int> data;
+
+    BigData(size_t size) : data(size) {
+        std::cout << "Constructor: Allocating " << size << " elements\n";
+    }
+
+    // Copy constructor
+    BigData(const BigData& other) : data(other.data) {
+        std::cout << "Copy Constructor: Deep copying\n";
+    }
+};
+
+BigData createBigData() {
+    BigData temp(1000000); // large allocation
+    return temp; // Will cause copy in C++03
+}
+
+int main() {
+    auto start = std::chrono::high_resolution_clock::now();
+    BigData obj = createBigData();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken: "
+              << std::chrono::duration<double>(end - start).count()
+              << " seconds\n";
+}
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+class BigData {
+public:
+    std::vector<int> data;
+
+    BigData(size_t size) : data(size) {
+        std::cout << "Constructor: Allocating " << size << " elements\n";
+    }
+
+    // Copy constructor
+    BigData(const BigData& other) : data(other.data) {
+        std::cout << "Copy Constructor: Deep copying\n";
+    }
+
+    // Move constructor
+    BigData(BigData&& other) noexcept : data(std::move(other.data)) {
+        std::cout << "Move Constructor: Moving resources\n";
+    }
+};
+
+BigData createBigData() {
+    BigData temp(1000000);
+    return temp; // In C++11+, this will call move constructor (or be elided)
+}
+
+int main() {
+    auto start = std::chrono::high_resolution_clock::now();
+    BigData obj = createBigData();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken: "
+        << std::chrono::duration<double>(end - start).count()
+        << " seconds\n";
+}
+
+
+
+
+Move constructor signature:
+ClassName(ClassName&& other) noexcept;
+Takes an rvalue reference (&&).
+Transfers ownership instead of copying.
+Use std::move() when you explicitly want to move:
+BigData b2 = std::move(b1); // b1 becomes empty
+Performance:
+Copy: O(N) for N elements.
+Move: O(1) pointer swap.
+Copy elision:
+Sometimes C++ skips both copy and move entirely — even faster.
+Guaranteed in C++17 for return values.
+
+
+
+
+
+
+
+
 
