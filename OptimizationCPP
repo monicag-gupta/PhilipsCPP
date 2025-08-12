@@ -312,5 +312,98 @@ Requires /std:c++17 or higher and Windows SDK that supports parallel STL.
 
 
 
+Value vs reference semantics
+
+Value Semantics
+What it means:
+When you copy a variable (or pass it to a function), a new independent copy of the data is created.
+Changes to the copy do not affect the original.
+Analogy:
+You photocopy a document. Editing your copy does not change the original document.
+In C++:
+Built-in types (int, double, etc.) and user-defined types without explicit pointer sharing (unless explicitly designed otherwise) follow value semantics.
+ Reference Semantics
+What it means:
+You are referring to the same object. 
+No copy is made. Changes via the reference affect the original.
+Analogy:
+You give someone your only copy of a document. They can scribble on it, and you’ll see the changes.
+In C++:
+Achieved using references (T&) or pointers (T*).
+
+
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+// Value semantics: Pass by value (copies the vector)
+int sumEvenNumbersValue(std::vector<int> v) {
+    int sum = 0;
+    for (int x : v) {
+        if (x % 2 == 0) {
+            sum += x;
+        }
+    }
+    return sum;
+}
+
+// Reference semantics: Pass by const reference (no copy)
+int sumEvenNumbersRef(const std::vector<int>& v) {
+    int sum = 0;
+    for (int x : v) {
+        if (x % 2 == 0) {
+            sum += x;
+        }
+    }
+    return sum;
+}
+
+int main() {
+    const int SIZE = 10'000'000;
+    std::vector<int> data(SIZE);
+    for (int i = 0; i < SIZE; ++i) {
+        data[i] = i;
+    }
+
+    // Value semantics timing
+    auto startValue = std::chrono::high_resolution_clock::now();
+    int totalValue = sumEvenNumbersValue(data);
+    auto endValue = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsedValue = endValue - startValue;
+
+    // Reference semantics timing
+    auto startRef = std::chrono::high_resolution_clock::now();
+    int totalRef = sumEvenNumbersRef(data);
+    auto endRef = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsedRef = endRef - startRef;
+
+    // Results
+    std::cout << "Value semantics - Sum: " << totalValue 
+              << ", Time: " << elapsedValue.count() << " seconds\n";
+    std::cout << "Reference semantics - Sum: " << totalRef 
+              << ", Time: " << elapsedRef.count() << " seconds\n";
+
+    return 0;
+}
+
+
+
+
+How it works:
+Value semantics (sumEvenNumbersValue) → takes std::vector<int> by value, which copies all 10M integers before summing.
+Reference semantics (sumEvenNumbersRef) → takes const std::vector<int>&, no copy, directly processes the original.
+Uses std::chrono to measure elapsed time for each case.
+ 
+If you run this with 10 million elements:
+Value semantics will be much slower because of the copy (hundreds of ms to seconds).
+Reference semantics will be significantly faster since no copy is made.
+
+
+
+
+
+
+
 
 
