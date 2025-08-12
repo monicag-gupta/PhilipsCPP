@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int main() {
+    int a = 10;
+    int b = 20;
+    std::vector<int> numbers = {1, 2, 3, 4, 5};
+
+    std::cout << "Initial a = " << a << ", b = " << b << "\n";
+
+    // Capture by value
+    auto byValue = [=]() {
+        std::cout << "[=] Capture by value: a = " << a << ", b = " << b << "\n";
+    };
+
+    // Capture by reference
+    auto byRef = [&]() {
+        std::cout << "[&] Capture by reference: a = " << a << ", b = " << b << "\n";
+        a += 5; // Modifies the outer variable
+    };
+
+    // Capture mix: a by value, b by reference
+    auto mixCapture = [a, &b]() {
+        std::cout << "[a, &b] Mix capture: a = " << a << ", b = " << b << "\n";
+        b += 10; // Can modify b, but not a
+    };
+
+    // Mutable lambda (allows modification of value-captured variables internally)
+    auto mutableValue = [a]() mutable { 
+       a += 100; // modifies lambda's copy
+        std::cout << "[mutable] a (inside lambda) = " << a << "\n";
+    };
+
+    // Capture with loop (closure remembers its state)
+    int factor = 2;
+    std::for_each(numbers.begin(), numbers.end(), [factor](int &n) {
+        n *= factor; // multiply each element by factor
+    });
+
+    // Execute
+    byValue();
+    byRef();
+    mixCapture();
+    mutableValue();
+
+    std::cout << "After lambdas: a = " << a << ", b = " << b << "\n";
+
+    // Show closure with updated vector
+    std::cout << "Numbers after scaling: ";
+    for (auto n : numbers) std::cout << n << " ";
+    std::cout << "\n";
+
+    return 0;
+}
+
