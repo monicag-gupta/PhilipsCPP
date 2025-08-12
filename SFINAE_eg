@@ -18,3 +18,37 @@ int main() {
     print(3.14);   // NOT integral
 }
 
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <typeinfo>
+
+int main() {
+    int x = 10;
+    double y = 3.14;
+
+    decltype(x) a = 5;     // 'a' is of type int
+    decltype(y) b = 2.5;   // 'b' is of type double
+
+    std::cout << typeid(a).name() << "\n"; // Usually prints "i" (int)
+    std::cout << typeid(b).name() << "\n"; // Usually prints "d" (double)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
