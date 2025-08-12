@@ -46,6 +46,29 @@ int main() {
 
 
 
+With Expressions
+decltype can deduce types from expressions:
+int i = 0;
+decltype(i + 2.5) result; // 'result' will be double because i + 2.5 is double
+With Functions
+int foo() { return 42; }
+decltype(foo()) val = foo(); // val is int
+Important Rule: Value Categories
+decltype behaves differently based on value category:
+int x = 5;
+int& ref = x;
+decltype(x)   a = x; // int
+decltype(ref) b = x; // int&   (reference preserved)
+decltype((x)) c = x; // int&   (note the extra parentheses!)
+Without parentheses → you get the declared type.
+With parentheses → expression form, may yield reference type.
+
+
+
+
+
+
+
 
 
 
