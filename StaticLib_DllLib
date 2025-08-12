@@ -13,3 +13,22 @@ int add(int a, int b) { return a + b; }
 int main() {
     std::cout << add(3, 4) << "\n";
 }
+
+
+
+
+
+Create a Static Library (.lib): StaticLib1  project in VS2022.
+Build it → produces .lib.
+Link .lib into your main app project.
+
+
+
+1) In the same Sol Add a Static  Lib project
+2) Remove precompiled lib from project
+3) create mathlib.h
+4) create mathlib.cpp
+5) code them
+6) Build the Project
+7) Main Project -> Add Reference -> Tick on the Static Lib1
+8) Use the lib in main.cpp
