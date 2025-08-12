@@ -1247,3 +1247,15 @@ int main() {
 
 
 
+
+Without explicit:
+Distance(int m) : meters(m) { }
+Then printDistance(200); would compile, because the compiler would implicitly convert 200 into a Distance object, which may be unintended.
+
+
+
+
+
+
+
+
