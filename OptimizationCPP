@@ -1121,6 +1121,83 @@ int main() {
 
 
 
+override ensures that the function actually overrides a virtual function from the base class.
+If you get the function signature wrong (parameters, const, etc.), the compiler throws an error.
+Without override, the compiler might silently create a new function in the derived class, leading to bugs.
+ 
+
+
+
+
+
+In C++, final is a specifier you can apply to classes or virtual member functions to prevent further overriding or inheritance.
+Key Points
+Function-level final
+Use when you want a specific virtual function to be the last override in the hierarchy.
+Class-level final
+Use when you don’t want anyone to derive from your class.
+Why use it?
+Prevents accidental overrides.
+Makes code easier to maintain.
+Helps the compiler optimize (since it knows no further overrides exist).
+
+
+
+
+
+#include <iostream>
+using namespace std;
+
+// Base class
+class Base {
+public:
+    virtual void show() {
+        cout << "Base::show()" << endl;
+    }
+
+    virtual void process() final { // No derived class can override this
+        cout << "Base::process() (final)" << endl;
+    }
+};
+
+// Derived class
+class Derived : public Base {
+public:
+    void show() override { // Allowed: overriding non-final method
+        cout << "Derived::show()" << endl;
+    }
+
+    // Uncommenting this will cause a compile error:
+    // void process() override { 
+    //     cout << "Derived::process()" << endl; 
+    // }
+};
+
+// Preventing further inheritance
+class NoInherit final {
+public:
+    void greet() {
+        cout << "Hello from NoInherit!" << endl;
+    }
+};
+
+// Uncommenting this will cause an error:
+// class Another : public NoInherit {};
+
+int main() {
+    Derived d;
+    d.show();      // Calls Derived::show()
+    d.process();   // Calls Base::process(), cannot be overridden
+
+    NoInherit obj;
+    obj.greet();
+
+    return 0;
+}
+
+
+
+
 
 
 
