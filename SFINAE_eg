@@ -146,6 +146,28 @@ int main() {
 
 
 
+#include <iostream>
+#include <type_traits>
+
+template <typename T>
+void printTypeInfo(T value) {
+    if constexpr (std::is_integral_v<T>) {
+        std::cout << value << " is integral.\n";
+    }
+    else if constexpr (std::is_floating_point_v<T>) {
+        std::cout << value << " is floating point.\n";
+    }
+    else {
+        std::cout << "Unknown type.\n";
+    }
+}
+int main() {
+    printTypeInfo(42);     // 42 is integral.
+    printTypeInfo(3.14);   // 3.14 is floating point.
+    printTypeInfo("Hi");   // Unknown type.
+}
+
+
 
 
 
