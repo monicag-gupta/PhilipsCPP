@@ -403,6 +403,79 @@ Reference semantics will be significantly faster since no copy is made.
 
 
 
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+class BigObject {
+public:
+    std::vector<int> data;
+
+    BigObject(size_t n) : data(n, 42) {
+        std::cout << "Constructor\n";
+    }
+
+    // Copy constructor
+    BigObject(const BigObject& other) : data(other.data) {
+        std::cout << "Copy Constructor\n";
+    }
+
+    // Move constructor
+    BigObject(BigObject&& other) noexcept : data(std::move(other.data)) {
+        std::cout << "Move Constructor\n";
+    }
+};
+
+// Case 1: Without copy elision (return by value without optimizations)
+BigObject createWithoutElision(size_t n) {
+    BigObject obj(n);
+    return obj; // may cause copy if elision not applied
+}
+
+// Case 2: With copy elision (NRVO - Named Return Value Optimization)
+BigObject createWithElision(size_t n) {
+    return BigObject(n); // temporary directly constructed in caller
+}
+
+// Case 3: Using std::move to force move semantics
+BigObject createWithMove(size_t n) {
+    BigObject obj(n);
+    return std::move(obj); // forces move
+}
+
+// Helper to time execution
+template <typename Func>
+void measureTime(const std::string& label, Func f) {
+    auto start = std::chrono::high_resolution_clock::now();
+    f();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << label << " took " << elapsed.count() << " seconds.\n\n";
+}
+
+int main() {
+    size_t size = 50'000'000; // big data for visible timings
+
+    std::cout << "=== Without Copy Elision ===\n";
+    measureTime("Without Elision", [&]() {
+        BigObject obj = createWithoutElision(size);
+        });
+
+    std::cout << "=== With Copy Elision ===\n";
+    measureTime("With Elision", [&]() {
+        BigObject obj = createWithElision(size);
+        });
+
+    std::cout << "=== With Move Semantics ===\n";
+    measureTime("With Move", [&]() {
+        BigObject obj = createWithMove(size);
+        });
+
+    return 0;
+}
+
+
+
 
 
 
