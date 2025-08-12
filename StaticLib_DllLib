@@ -32,3 +32,51 @@ Link .lib into your main app project.
 6) Build the Project
 7) Main Project -> Add Reference -> Tick on the Static Lib1
 8) Use the lib in main.cpp
+
+
+
+
+
+
+
+
+
+
+
+
+Dynamic Library
+
+Create a Dynamic-Link Library (.dll) project : Dll1:
+Properties -> C/C++ → Preprocessor → Preprocessor DefinitionsAdd MATHLIB_EXPORTS 
+Ensure No PreCompiled Header files are used.
+Build the project (Build → Build Dll1).
+
+Link .dll into your main app project.
+
+
+
+
+
+
+// mathlibDLL.h
+#pragma once
+#ifdef MATHLIB_EXPORTS
+#define MATHLIB_API __declspec(dllexport)
+#else
+#define MATHLIB_API __declspec(dllimport)
+#endif
+
+extern "C" MATHLIB_API int add(int a, int b);
+
+
+// mathlibDLL.cpp
+#include "mathlibDLL.h"
+int add(int a, int b) { return a + b; }
+
+
+// main.cpp
+#include <iostream>
+#include "../Dll1/mathlibDLL.h"
+int main() {
+    std::cout << add(5, 6) << "\n";
+}
