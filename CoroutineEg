@@ -1,0 +1,50 @@
+#include <coroutine>
+#include <iostream>
+#include <optional>
+
+template<typename T>
+struct Generator {
+    struct promise_type;
+    using handle_type = std::coroutine_handle<promise_type>;
+
+    struct promise_type {
+        T current_value;
+        std::suspend_always yield_value(T value) {
+            current_value = value;
+            return {};
+        }
+        std::suspend_always initial_suspend() { return {}; }
+        std::suspend_always final_suspend() noexcept { return {}; }
+        Generator get_return_object() { return Generator{handle_type::from_promise(*this)}; }
+        void return_void() {}
+        void unhandled_exception() { std::exit(1); }
+    };
+
+    handle_type coro;
+    Generator(handle_type h) : coro(h) {}
+    ~Generator() { coro.destroy(); }
+
+    std::optional<T> next() {
+        if (!coro.done()) {
+            coro.resume();
+            return coro.promise().current_value;
+        }
+        return std::nullopt;
+    }
+};
+
+// Coroutine function
+Generator<int> counter(int start, int end) {
+    for (int i = start; i <= end; ++i) {
+        co_yield i; // yield each value
+    }
+}
+
+int main() {
+    auto gen = counter(1, 5);
+    while (auto value = gen.next()) {
+        std::cout << *value << " ";
+    }
+    return 0;
+}
+
