@@ -1001,9 +1001,120 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Data {
+    std::string payload;
+public:
+    Data(std::string str) : payload(std::move(str)) {
+        std::cout << "Constructed: " << payload << "\n";
+    }
+
+    // Move constructor marked noexcept
+    Data(Data&& other) noexcept
+        : payload(std::move(other.payload)) {
+        std::cout << "Move Constructed (noexcept): " << payload << "\n";
+    }
+
+    // Copy constructor
+    Data(const Data& other)
+        : payload(other.payload) {
+        std::cout << "Copied: " << payload << "\n";
+    }
+
+    // Move assignment
+    Data& operator=(Data&& other) noexcept {
+        std::cout << "Move Assigned (noexcept)\n";
+        payload = std::move(other.payload);
+        return *this;
+    }
+
+    // Copy assignment
+    Data& operator=(const Data& other) {
+        std::cout << "Copy Assigned\n";
+        payload = other.payload;
+        return *this;
+    }
+};
+
+int main() {
+    std::cout << "=== Demonstrating noexcept ===\n";
+    std::vector<Data> vec;
+    vec.reserve(3); // Avoid multiple reallocations initially
+
+    vec.emplace_back("First");
+    vec.emplace_back("Second");
+    vec.emplace_back("Third");
+
+    std::cout << "\nTriggering reallocation...\n";
+    // This will cause vector to grow and reallocate.
+    // Because move constructor is noexcept, it will MOVE instead of COPY
+    vec.emplace_back("Fourth");
+
+    return 0;
+}
 
 
 
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <string>
+
+class Base {
+public:
+    virtual void speak(const std::string& name) {
+        std::cout << "Base speaking: Hello, " << name << "!" << std::endl;
+    }
+    virtual void info() {
+        std::cout << "Base info" << std::endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    // Correctly overriding
+    void speak(const std::string& name) override {
+        std::cout << "Derived speaking: Hi, " << name << "!" << std::endl;
+    }
+
+    // If we misspell the method signature, override will cause a compile-time error.
+    // Uncomment this block to see the compiler catch it:
+    /*
+    void info(int x) override {  // ERROR: no function in Base with this signature
+        std::cout << "Wrong override attempt" << std::endl;
+    }
+    */
+
+    // Proper override
+    void info() override {
+        std::cout << "Derived info" << std::endl;
+    }
+};
+
+int main() {
+    Base* b1 = new Base();
+    Base* b2 = new Derived();
+
+    b1->speak("Alice");
+    b2->speak("Bob");
+
+    b1->info();
+    b2->info();
+
+    delete b1;
+    delete b2;
+
+    return 0;
+}
 
 
 
