@@ -69,6 +69,82 @@ With parentheses → expression form, may yield reference type.
 
 
 
+Common Use Cases
+Generic programming: deducing return types
+Template metaprogramming
+With auto to tie variable type to another expression’s type.
+
+Example in templates:
+template <typename T, typename U>
+auto add(T a, U b) -> decltype(a + b) {
+    return a + b;
+}
+Here:
+decltype(a + b) ensures return type matches the result of adding a and b.
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <typeinfo>
+#include <string>
+
+int foo() { return 42; } // Example function
+
+// Generic template function using decltype to deduce return type
+template <typename T, typename U>
+auto add(T a, U b) -> decltype(a + b) {
+    return a + b;
+}
+
+int main() {
+    std::cout << std::boolalpha;
+
+    // 1️. With Expressions
+    int i = 0;
+    decltype(i + 2.5) result = i + 2.5; // double
+    std::cout << "decltype(i + 2.5) -> " << typeid(result).name()
+        << " value: " << result << "\n";
+
+    // 2️. With Functions
+    decltype(foo()) val = foo(); // int
+    std::cout << "decltype(foo()) -> " << typeid(val).name()
+        << " value: " << val << "\n";
+
+    // 3️. Value Categories
+    int x = 5;
+    int& ref = x;
+
+    decltype(x)   a = x; // int
+    decltype(ref) b = x; // int& (reference preserved)
+    decltype((x)) c = x; // int& (expression, yields reference)
+
+    a = 10;
+    b = 20; // changes x
+    c = 30; // also changes x
+
+    std::cout << "decltype(x) a = " << a << "\n";
+    std::cout << "decltype(ref) b = " << b << "\n";
+    std::cout << "decltype((x)) c = " << c << "\n";
+    std::cout << "x after b and c changes: " << x << "\n";
+
+    // 4️. Common Use Case - Templates
+    auto sum1 = add(2, 3.5);         // deduced double
+    auto sum2 = add(std::string("Hello, "), std::string("World!")); // deduced std::string
+
+    std::cout << "add(2, 3.5) -> " << sum1 << " (" << typeid(sum1).name() << ")\n";
+    std::cout << "add(strings) -> " << sum2 << " (" << typeid(sum2).name() << ")\n";
+
+    return 0;
+}
+
+
+
+
 
 
 
