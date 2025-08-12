@@ -48,3 +48,19 @@ int main() {
     return 0;
 }
 
+
+
+
+
+
+
+
+In C++20, coroutines allow functions to be suspended and resumed later — perfect for asynchronous programming, generators, and lazy computations.
+Visual Studio 2022 has full support for C++20 coroutines without needing external libraries (though cppcoro or std::generator in C++23 can make life easier).
+A coroutine is like a function that can pause (suspend) at certain points (co_yield, co_await) and resume later, preserving its state.
+Required Headers in VS2022
+#include <coroutine>
+#include <iostream>
+std::coroutine_handle — manages the coroutine state.
+std::suspend_always / std::suspend_never — controls suspension points.
+
