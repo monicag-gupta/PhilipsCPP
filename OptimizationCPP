@@ -763,6 +763,69 @@ Why it’s faster
 
 
 
+Memory alignment means arranging data in memory so that its address is a multiple of its size (or a platform-specific alignment boundary).For example, on a 64-bit system:
+int (4 bytes) is typically aligned at 4-byte boundaries.
+double (8 bytes) is typically aligned at 8-byte boundaries.
+When variables are not aligned properly:
+The CPU may need multiple memory reads/writes to fetch/store the data.
+This results in slower performance.
+On some architectures, misalignment can cause crashes.
+Steps to Fix Misalignment
+Group larger types first (e.g., double, then int, then char).
+Minimize padding by ordering members from largest to smallest type size.
+If needed, use:
+alignas() to explicitly align.
+#pragma pack(push, 1) / #pragma pack(pop) for packed structs (be careful, can hurt performance if CPU doesn’t support unaligned access efficiently).
+Verify with sizeof(structName) to see space usage.
+
+
+
+
+#include <iostream>
+#include <chrono>
+#include <vector>
+
+struct Misaligned {
+    char a;
+    double b;
+    char c;
+    int d;
+};
+
+struct Aligned {
+    double b;
+    int d;
+    char a;
+    char c;
+};
+
+template<typename T>
+double testAccess(const std::string& name) {
+    const size_t N = 10'000'000;
+    std::vector<T> data(N);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    volatile double sum = 0;
+    for (size_t i = 0; i < N; ++i) {
+        sum += data[i].b;
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+
+    double ms = std::chrono::duration<double, std::milli>(end - start).count();
+    std::cout << name << " sum: " << sum << "\n";
+    std::cout << name << " Time: " << ms << " ms, Size: " << sizeof(T) << " bytes\n";
+    return ms;
+}
+
+int main() {
+    double t1 = testAccess<Misaligned>("Misaligned");
+    double t2 = testAccess<Aligned>("Aligned");
+
+    std::cout << "Speedup: " << t1 / t2 << "x faster with alignment.\n";
+}
+
+
+
 
 
 
