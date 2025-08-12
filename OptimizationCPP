@@ -666,6 +666,106 @@ int main() {
 
 
 
+Force / prevent per-function
+NO_INLINE (the macro) uses __declspec(noinline) so add_noinline will not be inlined even if the compiler would normally inline it.
+FORCE_INLINE uses __forceinline (MSVC) to strongly request inlining — compiler may still ignore in some cases but usually will inline in Release.
+NO_INLINE is the slowest because each call incurs function-call overhead (stack/frame, jump/return).
+inline reduces overhead and lets optimizer combine operations (faster).
+FORCE_INLINE may be slightly faster than plain inline when the compiler would otherwise not inline; often similar when compiler already inlines.
+
+
+
+
+
+
+
+Loop unrolling is a compiler optimization (or manual technique) where the loop body is duplicated multiple times to reduce the number of loop control operations (increment, comparison, jump), which can improve performance by:
+Reducing branch instructions.
+Increasing instruction-level parallelism.
+Allowing better CPU pipeline utilization.
+Why it’s faster
+Loop control operations happen ¼ as often.
+More work per loop iteration.
+CPU can parallelize independent additions better.
+Steps to Apply Loop Unrolling
+Identify a performance-critical loop.
+Check if iterations are independent (no dependencies between loop steps).
+Decide unrolling factor (2x, 4x, 8x — too high may cause cache issues).
+Modify the loop body to process multiple items per iteration.
+Add a tail loop for remaining elements if the size is not divisible by the unrolling factor.
+Benchmark before and after (as sometimes the compiler already optimizes it).
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+void normalLoop(const std::vector<int>& data) {
+    auto start = std::chrono::high_resolution_clock::now();
+    long long sum = 0;
+    for (size_t i = 0; i < data.size(); ++i) {
+        sum += data[i];
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "[Normal Loop] Sum = " << sum << ", Time = " << diff.count() << " s\n";
+}
+
+void unrolledLoop(const std::vector<int>& data) {
+    auto start = std::chrono::high_resolution_clock::now();
+    long long sum = 0;
+    size_t i = 0;
+    size_t limit = data.size() - (data.size() % 4);
+    for (; i < limit; i += 4) {
+        sum += data[i] + data[i + 1] + data[i + 2] + data[i + 3];
+    }
+    for (; i < data.size(); ++i) {
+        sum += data[i];
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "[Unrolled Loop 4x] Sum = " << sum << ", Time = " << diff.count() << " s\n";
+}
+
+int main() {
+    const size_t N = 100'000'000;
+    std::vector<int> data(N, 1);
+
+    normalLoop(data);
+    unrolledLoop(data);
+}
+
+
+
+
+
+
+Each loop iteration requires:
+1.	Increment i
+2.	Compare i to N
+3.	Jump to loop start
+4.	Load value and add
+→ Millions of extra branch & comparison instructions.
+
+Fix — With Loop Unrolling
+We unroll the loop by processing 4 elements per iteration
+
+Why it’s faster
+•	Loop control operations happen ¼ as often.
+•	More work per loop iteration.
+•	CPU can parallelize independent additions better.
+
+
+
+
+
+
+
+
+
 
 
 
