@@ -899,6 +899,103 @@ int main() {
 
 
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <chrono>
+
+// A simple big object to show cost of copying vs moving
+class BigData {
+public:
+    std::vector<int> data;
+
+    // Constructor: allocate large data
+    BigData(size_t size) {
+        data.resize(size, 42); // fill with dummy data
+        std::cout << "Constructor: Allocated " << size << " integers.\n";
+    }
+
+    // Copy Constructor
+    BigData(const BigData& other) {
+        data = other.data;
+        std::cout << "Copy Constructor called.\n";
+    }
+
+    // Move Constructor
+    BigData(BigData&& other) noexcept {
+        data = std::move(other.data);
+        std::cout << "Move Constructor called.\n";
+    }
+
+    // Assignment operators
+    BigData& operator=(const BigData& other) {
+        data = other.data;
+        std::cout << "Copy Assignment called.\n";
+        return *this;
+    }
+
+    BigData& operator=(BigData&& other) noexcept {
+        data = std::move(other.data);
+        std::cout << "Move Assignment called.\n";
+        return *this;
+    }
+};
+
+// Function taking lvalue reference
+void processLValue(BigData& obj) {
+    std::cout << "Processing LValue (no move)\n";
+}
+
+// Function taking rvalue reference
+void processRValue(BigData&& obj) {
+    std::cout << "Processing RValue (can move)\n";
+}
+
+// Simulate a function returning BigData (rvalue)
+BigData createBigData(size_t size) {
+    return BigData(size);
+}
+
+int main() {
+    using namespace std::chrono;
+
+    std::cout << "=== Lvalue vs Rvalue Reference Example ===\n";
+
+    // Create object
+    BigData a(5'000'000); // large object
+    processLValue(a);     // Pass lvalue
+    processRValue(std::move(a)); // Force rvalue
+
+    std::cout << "\n=== Copy vs Move Timing ===\n";
+
+    BigData b(10'000'000); // Big data
+
+    // Copy timing
+    auto start_copy = high_resolution_clock::now();
+    BigData copyB = b; // calls copy constructor
+    auto end_copy = high_resolution_clock::now();
+
+    auto copy_time = duration_cast<milliseconds>(end_copy - start_copy).count();
+
+    // Move timing
+    auto start_move = high_resolution_clock::now();
+    BigData moveB = std::move(b); // calls move constructor
+    auto end_move = high_resolution_clock::now();
+
+    auto move_time = duration_cast<milliseconds>(end_move - start_move).count();
+
+    std::cout << "\nCopy Time: " << copy_time << " ms\n";
+    std::cout << "Move Time: " << move_time << " ms\n";
+
+    std::cout << "\n=== Returning Rvalue from Function ===\n";
+    BigData c = createBigData(5'000'000); // RVO or move
+
+    return 0;
+}
+
+
+
+
 
 
 
