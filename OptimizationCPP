@@ -1,0 +1,11 @@
+Measuring Performance in VS2022
+Visual Studio includes profiling tools:
+Step-by-step:
+Build in Release mode with full optimization.
+Go to Debug → Performance Profiler.
+Select:
+CPU Usage (find slow functions)
+Instrumentation (detailed function timings)
+Concurrency Visualizer (for multithreaded apps)
+Run your program & analyze hot paths.
+
