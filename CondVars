@@ -1,0 +1,114 @@
+A condition variable is a synchronization primitive that allows threads to wait until a certain condition becomes true.It is typically used with a mutex to protect shared data.
+Think of it like a “waiting room”:
+A thread can wait on a condition variable until it gets a “signal” from another thread.
+Another thread notifies the condition variable to wake up one or more waiting threads.
+Header file: <condition_variable>
+Works only with std::unique_lock<std::mutex> (not std::lock_guard).
+Main functions:
+wait(lock, predicate) → waits until predicate returns true.
+notify_one() → wakes one waiting thread.
+notify_all() → wakes all waiting threads.
+
+
+Always check the predicate in a loop because of spurious wakeups (a thread might wake up without being notified).
+Efficient: Consumer sleeps instead of busy-waiting.
+Safe: Mutex ensures shared data is accessed safely.
+Flexible: Can wake one or all waiting threads.
+
+
+
+
+#include <iostream>           
+#include <thread>             
+#include <mutex>              // std::mutex, std::unique_lock
+#include <condition_variable> 
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
+void print_id(int id) {
+	std::unique_lock<std::mutex> lck(mtx);
+	while (!ready) cv.wait(lck);
+	std::cout << "thread " << id << '\n';
+}
+void go() {
+	std::unique_lock<std::mutex> lck(mtx);
+	ready = true;
+	cv.notify_all();
+}
+int main()  {
+	std::thread threads[10];
+	for (int i = 0; i<10; ++i) // spawn 10 threads:
+		threads[i] = std::thread(print_id, i);
+	std::cout << "10 threads ready to race...\n";
+	go();                       // go!
+	for (auto& th : threads) th.join();
+	return 0;
+}
+
+
+
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+#include <chrono>
+
+std::mutex mtx;
+std::condition_variable cv;
+std::queue<int> dataQueue;
+bool finished = false; // Signals that producer is done
+
+// Producer function
+void producer() {
+    for (int i = 1; i <= 5; ++i) {
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            std::cout << "[Producer] Producing item " << i << "\n";
+            dataQueue.push(i);
+        }
+        cv.notify_one(); // Wake up one waiting consumer
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        finished = true;
+    }
+    cv.notify_all(); // Wake all consumers (important for shutdown)
+}
+
+// Consumer function
+void consumer() {
+    while (true) {
+        std::unique_lock<std::mutex> lock(mtx);
+        // Wait until there is data or producer is finished
+        cv.wait(lock, [] {
+            return !dataQueue.empty() || finished;
+        });
+
+        if (!dataQueue.empty()) {
+            int value = dataQueue.front();
+            dataQueue.pop();
+            lock.unlock(); // Release lock while processing
+            std::cout << "    [Consumer] Consumed item " << value << "\n";
+        }
+        else if (finished) {
+            break; // Exit loop if no more data will be produced
+        }
+    }
+}
+
+int main() {
+    std::thread t1(producer);
+    std::thread t2(consumer);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "All work done!\n";
+    return 0;
+}
+
+
+
