@@ -1,0 +1,15 @@
+// mathlib.h
+#pragma once
+int add(int a, int b);
+
+// mathlib.cpp
+#include "mathlib.h"
+int add(int a, int b) { return a + b; }
+
+//In Client Project:
+// main.cpp
+#include <iostream>
+#include "../StaticLib1/mathlib.h"
+int main() {
+    std::cout << add(3, 4) << "\n";
+}
