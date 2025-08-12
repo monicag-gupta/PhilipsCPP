@@ -9,3 +9,103 @@ Instrumentation (detailed function timings)
 Concurrency Visualizer (for multithreaded apps)
 Run your program & analyze hot paths.
 
+
+
+
+Build in Release mode with full optimization
+
+Switch the build configuration to Release
+Look at the toolbar at the top (usually next to the green Run/Debug button).
+You’ll see a dropdown with Debug selected by default.
+Change it to Release.
+This already tells VS2022 to disable debug checks and turn on optimizations by default.
+You need to tell Visual Studio to use C++20 in both Debug and Release modes: project -> Properties -> (ensure Configuration = Release) -> Configuration Properties → C/C++ → Language -> C++ Language Standard -> ISO C++20 Standard (/std:c++20) -> OK -> Rebuild Project
+Extra performance:
+Under C/C++ → Code Generation → Enable Enhanced Instruction Set, pick AVX2 (or AVX-512 if your CPU supports it).
+
+
+Right-click your project → Properties.
+In the left tree:
+Go to Configuration: Release (top dropdown in the Properties window).
+Under Configuration Properties → C/C++ → Optimization:
+Optimization → Maximize Speed (/O2)
+Inline Function Expansion → Any Suitable (/Ob2)
+Favor Size or Speed → Favor fast code (/Ot)
+Omit Frame Pointers → Yes (/Oy)
+Whole Program Optimization → Enable
+Under Configuration Properties → Linker → Optimization:
+Link Time Code Generation → Use Link Time Code Generation (/LTCG
+
+
+
+
+
+
+Bottleneck analysis only makes sense if you’re profiling code as it will run in production.
+Set Configuration → Release
+Enable:
+/O2 — Maximize Speed
+/GL — Whole Program Optimization
+/arch:AVX2 — Use modern CPU instructions (if supported)
+/std:c++20 — Make sure modern features compile
+Narrowing Down Bottlenecks Tips:
+Use [Instrumentation] instead of Sampling if you need exact timing.
+In C++20, also look for:
+Unnecessary copies → fix with const&, string_view, span
+Inefficient algorithms → switch to better STL algorithm or parallel STL (std::execution::par)
+Branch misprediction → hint with [[likely]] / [[unlikely]]
+Memory allocations → profile allocation count with Diagnostic Tools → Memory Usage
+ 
+
+
+
+
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include <thread>
+#include <filesystem>
+
+void slowFunction() {
+    std::string result;
+    for (int i = 0; i < 20000; ++i) {
+        result += "data";
+    }
+}
+
+void mediumFunction() {
+    std::string result;
+    result.reserve(20000 * 4);
+    for (int i = 0; i < 20000; ++i) {
+        result += "data";
+    }
+}
+
+void fastFunction() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+}
+
+int main() {
+    // Print working directory so you know where the file is saved
+    std::cout << "Working directory: " << std::filesystem::current_path() << "\n";
+
+    std::ofstream log("profile_output.txt");
+
+    log << "Running demo with Instrumentation profiling...\n";
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    slowFunction();
+    mediumFunction();
+    fastFunction();
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    log << "Total time: " << duration.count() << " ms\n";
+    log.close();
+
+    return 0;
+}
+
+
