@@ -47,7 +47,8 @@ Link .lib into your main app project.
 Dynamic Library
 
 Create a Dynamic-Link Library (.dll) project : Dll1:
-Properties -> C/C++ → Preprocessor → Preprocessor DefinitionsAdd MATHLIB_EXPORTS 
+Properties -> C/C++ → Preprocessor → Preprocessor Definitions ->
+        Add MATHLIB_EXPORTS 
 Ensure No PreCompiled Header files are used.
 Build the project (Build → Build Dll1).
 
@@ -56,7 +57,7 @@ Link .dll into your main app project.
 
 
 
-
+InDLL1 project:
 
 // mathlibDLL.h
 #pragma once
@@ -73,6 +74,9 @@ extern "C" MATHLIB_API int add(int a, int b);
 #include "mathlibDLL.h"
 int add(int a, int b) { return a + b; }
 
+
+
+In Main Proj : 
 
 // main.cpp
 #include <iostream>
