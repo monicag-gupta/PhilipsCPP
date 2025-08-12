@@ -1,0 +1,20 @@
+#include <iostream>
+#include <type_traits>
+
+template<typename T>
+typename std::enable_if<std::is_integral<T>::value, void>::type
+print(T value) {
+    std::cout << value << " is integral.\n";
+}
+
+template<typename T>
+typename std::enable_if<!std::is_integral<T>::value, void>::type
+print(T value) {
+    std::cout << value << " is NOT integral.\n";
+}
+
+int main() {
+    print(42);     // integral
+    print(3.14);   // NOT integral
+}
+
