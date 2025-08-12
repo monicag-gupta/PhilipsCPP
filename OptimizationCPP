@@ -1199,5 +1199,51 @@ int main() {
 
 
 
+explicit in C++
+Purpose: Prevents implicit conversions and copy-initialization.
+When used: Mostly with single-argument constructors or conversion operators.
+Why: Avoids accidental conversions that could lead to subtle bugs.
+
+
+
+
+#include <iostream>
+#include <string>
+
+class Distance {
+    int meters;
+public:
+    // Constructor marked as explicit
+    explicit Distance(int m) : meters(m) {
+        std::cout << "Distance created: " << meters << " meters\n";
+    }
+
+    int getMeters() const { return meters; }
+};
+
+void printDistance(const Distance& d) {
+    std::cout << "Distance is: " << d.getMeters() << " meters\n";
+}
+
+int main() {
+    // Works fine
+    Distance d1(100);  // Direct initialization
+    printDistance(d1);
+
+    // Error: implicit conversion from int to Distance not allowed
+    // printDistance(200);
+
+    // Works with explicit constructor using direct initialization
+    printDistance(Distance(200)); // OK
+
+    // You can also use uniform initialization or Brace initialization
+    printDistance(Distance{ 300 });
+
+    return 0;
+}
+
+
+
+
 
 
