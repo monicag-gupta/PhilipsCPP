@@ -201,6 +201,115 @@ int main() {
 
 
 
+const std::string& and const std::vector<int>& avoid copies on function calls.
+std::string_view is a lightweight, non-owning view of a string (no copy).Perfect for read-only access to strings or substrings.
+std::span allows a view over any contiguous sequence (array, vector, etc.) without copying.
+
+
+
+
+
+Inefficient algorithms:
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+int sumEvenNumbers(const std::vector<int>& v) {
+    int sum = 0;
+    for (int x : v) {
+        if (x % 2 == 0) {
+            sum += x;
+        }
+    }
+    return sum;
+}
+
+int main() {
+    std::vector<int> data(10000000);
+    for (int i = 0; i < 10000000; ++i) {
+        data[i] = i;
+    }
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    int total = sumEvenNumbers(data);
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Sum of even numbers: " << total << "\n";
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Time taken: " << duration.count() << " ms\n";
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <numeric>
+#include <execution>
+#include <chrono>
+
+int sumEvenNumbersManual(const std::vector<int>& v) {
+    int sum = 0;
+    for (int x : v) {
+        if (x % 2 == 0) sum += x;
+    }
+    return sum;
+}
+
+int sumEvenNumbersParallel(const std::vector<int>& v) {
+    return std::transform_reduce(
+        std::execution::par,
+        v.begin(), v.end(),
+        0,
+        std::plus<>(),
+        [](int x) { return (x % 2 == 0) ? x : 0; }
+    );
+}
+
+int main() {
+    std::vector<int> data(100000000);
+    for (int i = 0; i < data.size(); ++i) {
+        data[i] = i;
+    }
+
+    auto start = std::chrono::high_resolution_clock::now();
+    int manualSum = sumEvenNumbersManual(data);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Manual sum: " << manualSum << "\n";
+    std::cout << "Manual duration (ms): "
+        << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "\n";
+
+    start = std::chrono::high_resolution_clock::now();
+    int parallelSum = sumEvenNumbersParallel(data);
+    end = std::chrono::high_resolution_clock::now();
+    std::cout << "Parallel sum: " << parallelSum << "\n";
+    std::cout << "Parallel duration (ms): "
+        << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "\n";
+
+    return 0;
+}
+
+
+
+
+Fix 1: Use better STL algorithm (std::accumulate + std::copy_if or std::ranges in C++20)
+This uses ranges views to filter evens lazily, then accumulate sum.
+Cleaner and often more optimized by the compiler.
+ 
+Fix 2: Use Parallel STL (std::execution::par) for speed
+std::transform_reduce applies a transform ([](int x){...}) and reduces (sum) in parallel.
+Takes advantage of multiple CPU cores.
+Requires /std:c++17 or higher and Windows SDK that supports parallel STL.
+
+
+
 
 
 
