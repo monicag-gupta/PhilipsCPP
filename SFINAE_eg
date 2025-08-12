@@ -172,4 +172,69 @@ int main() {
 
 
 
+Concepts (C++20) are compile-time predicates that constrain template parameters.
+Think of them as rules or contracts you place on a template type to ensure it meets certain requirements — before the compiler even instantiates the template.
+Built-in concepts include:
+std::integral, std::floating_point
+std::same_as, std::convertible_to
+std::derived_from
+std::default_initializable, std::copyable, etc
+
+
+
+
+
+#include <concepts>
+#include <iostream>
+//template<typename T>  //without concepts
+//T add(T a, T b) {
+//    return a + b; // error only happens if T doesn't support +
+//}
+template<std::integral T> // concept: only integers allowed
+T add(T a, T b) {
+    return a + b;
+}
+int main() {
+    std::cout << add(2, 3) << "\n";   // works
+    // std::cout << add(2.5, 3.5) << "\n"; // compile-time error: doesn't satisfy integral
+}
+
+
+
+
+
+
+#include <iostream>
+#include <concepts> // for std::integral
+// 1️. AUTO PARAMETERS (abbreviated template, no constraints)
+auto add_auto(auto a, auto b) {
+    return a + b; // deduced return type
+}
+// 2️. CLASSIC TEMPLATE (no constraints)
+template<typename T, typename U>
+auto add_template(T a, U b) {
+    return a + b; // deduced return type
+}
+// 3️. CONCEPTS WITH CLASSIC TEMPLATE
+template<std::integral T, std::integral U>
+auto add_concept(T a, U b) {
+    return a + b; // only integral types allowed
+}
+// 4️. AUTO PARAMETERS WITH CONCEPTS (most concise constrained form)
+auto add_auto_concept(std::integral auto a, std::integral auto b) {
+    return a + b; // only integral types allowed
+}
+int main() {
+    // 1. Auto parameters
+    std::cout << "add_auto: " << add_auto(3.5, 2) << "\n"; // works for any type with +
+    // 2. Classic template
+    std::cout << "add_template: " << add_template(5, 10) << "\n"; // any type with +
+    // 3. Concepts with classic template
+    std::cout << "add_concept: " << add_concept(7, 8) << "\n"; // OK: integral
+    // std::cout << add_concept(3.5, 2) << "\n"; // Compile error: double not integral
+    // 4. Auto parameters with concepts
+    std::cout << "add_auto_concept: " << add_auto_concept(20, 30) << "\n"; // OK: integral
+    // std::cout << add_auto_concept(3.5, 2) << "\n"; // Compile error
+    return 0;
+}
 
