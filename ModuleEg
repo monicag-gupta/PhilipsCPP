@@ -1,1 +1,53 @@
 MathModule.ixx — Module Interface
+
+
+
+export module MathModule;  // Declaring the module name
+
+// Exported function declarations
+export int add(int a, int b);
+export int multiply(int a, int b);
+
+// Internal (non-exported) helper function
+int square(int x) {
+    return x * x;
+}
+
+// Exported definition
+export int add(int a, int b) {
+    return a + b;
+}
+
+export int multiply(int a, int b) {
+    // We can use the internal helper
+    return square(a) * b;
+}
+
+
+
+
+main.cpp — Using the Module
+
+import MathModule;   // Import the module
+
+#include <iostream>
+
+int main() {
+    int x = 3, y = 4;
+
+    std::cout << "Add: " << add(x, y) << "\n";
+    std::cout << "Multiply: " << multiply(x, y) << "\n";
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
