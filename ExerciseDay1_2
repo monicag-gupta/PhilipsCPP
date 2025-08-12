@@ -291,3 +291,54 @@ Keep Employee classes and SRP intact — thread logic is separate from core busi
  EmployeeManager also persists data to a file asynchronously. Uses std::async + std::future for background payroll calculation.
 
 
+
+
+
+
+
+
+
+Add SFINAE, Concepts, Templates integration:
+Step 1 — Core Employee Structure (Interface + Base Class)
+•	Create an IEmployee interface (pure virtual) for ISP/DIP.
+•	Implement a template<typename TSalary> Employee class so salary can be int, double, or other numeric types.
+•	Use Concepts to enforce that TSalary must be an arithmetic type:
+template<typename TSalary>
+requires std::is_arithmetic_v<TSalary>
+class Employee : public IEmployee { ... };
+•	This is effectively replacing most old SFINAE enable_if cases.
+Step 2 — Employee Manager
+•	EmployeeManager holds std::vector<std::shared_ptr<IEmployee>>.
+•	Thread-safe using std::mutex and std::lock_guard.
+•	Add templated addEmployee method:
+template<std::derived_from<IEmployee> T>
+void addEmployee(std::shared_ptr<T> emp);
+o	std::derived_from is a C++20 concept (compile-time check).
+o	If not derived from IEmployee, compile-time error (concepts replacing SFINAE).
+Step 3 — Asynchronous File Persistence
+•	saveToFileAsync() uses std::async for non-blocking save.
+•	Locks vector with std::lock_guard before reading.
+•	Uses concepts to ensure file output works only for streamable objects:
+template<typename T>
+concept Streamable = requires(std::ostream& os, const T& obj) {
+    { os << obj } -> std::same_as<std::ostream&>;
+};
+Step 4 — Asynchronous Payroll Calculation
+•	calculateTotalPayrollAsync() returns std::future<double>.
+•	Uses std::async to sum salaries in background.
+•	Uses concept to ensure salaries are arithmetic.
+Step 5 — Main Function
+•	Add employees with different numeric salary types.
+•	Demonstrate compile-time error if wrong salary type is used (concept).
+•	Demonstrate async save and payroll calculation.
+•	Main thread prints messages while async tasks run.
+Step 6 — SFINAE & Concepts Showcase
+•	Show old SFINAE-style:
+template<typename T>
+typename std::enable_if<std::is_integral_v<T>, T>::type
+doubleSalary(T salary) { return salary * 2; }
+•	Show concept-style equivalent:
+auto doubleSalary(std::integral auto salary) { return salary * 2; }
+
+
+
