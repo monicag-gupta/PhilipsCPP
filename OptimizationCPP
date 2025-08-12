@@ -109,3 +109,95 @@ int main() {
 }
 
 
+
+
+
+Problem code:
+#include <iostream>
+#include <string>
+#include <vector>
+
+// Function takes std::string by value (copy!)
+std::string repeatString(std::string s, int times) {
+    std::string result;
+    for (int i = 0; i < times; ++i) {
+        result += s;
+    }
+    return result;
+}
+
+// Function takes vector<int> by value (copy!)
+int sumVector(std::vector<int> v) {
+    int sum = 0;
+    for (auto i : v) {
+        sum += i;
+    }
+    return sum;
+}
+
+int main() {
+    std::string largeString(10000, 'x');
+    std::vector<int> largeVector(100000, 1);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto repeated = repeatString(largeString, 10);
+    auto sum = sumVector(largeVector);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Repeat string length: " << repeated.length() << "\n";
+    std::cout << "Sum vector: " << sum << "\n";
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Duration (ms): " << duration.count() << "\n";
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include <string>
+#include <string_view>
+#include <vector>
+#include <span>
+#include <chrono>
+
+// Using string_view and span to avoid copies
+std::string repeatString(std::string_view s, int times) {
+    std::string result;
+    for (int i = 0; i < times; ++i) {
+        result += s;
+    }
+    return result;
+}
+
+int sumVector(std::span<const int> v) {
+    int sum = 0;
+    for (auto i : v) {
+        sum += i;
+    }
+    return sum;
+}
+
+int main() {
+    std::string largeString(10000, 'x');
+    std::vector<int> largeVector(100000, 1);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto repeated = repeatString(largeString, 10);
+    auto sum = sumVector(largeVector);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Repeat string length: " << repeated.length() << "\n";
+    std::cout << "Sum vector: " << sum << "\n";
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Duration (ms): " << duration.count() << "\n";
+
+    return 0;
+}
+
+
+
