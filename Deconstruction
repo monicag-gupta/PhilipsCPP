@@ -1,0 +1,53 @@
+#include <iostream>
+#include <tuple>
+#include <map>
+#include <string>
+using namespace std;
+
+// A simple struct
+struct Employee {
+    int id;
+    string name;
+    double salary;
+};
+
+int main() {
+    // -----------------
+    // Example 1: Pair
+    // -----------------
+    pair<int, string> p = {101, "Alice"};
+    auto [id1, name1] = p; // Structured binding
+    cout << "Pair -> ID: " << id1 << ", Name: " << name1 << "\n";
+
+    // -----------------
+    // Example 2: Tuple
+    // -----------------
+    tuple<int, string, double> t = {102, "Bob", 75000.50};
+    auto [id2, name2, salary2] = t; // Deconstruct tuple
+    cout << "Tuple -> ID: " << id2 << ", Name: " << name2 << ", Salary: " << salary2 << "\n";
+
+    // -----------------
+    // Example 3: Struct
+    // -----------------
+    Employee e1{103, "Charlie", 80000.0};
+    auto [empId, empName, empSalary] = e1; // Deconstruct struct
+    cout << "Struct -> ID: " << empId << ", Name: " << empName << ", Salary: " << empSalary << "\n";
+
+    // -----------------
+    // Example 4: Map iteration
+    // -----------------
+    map<int, string> employees = {{1, "David"}, {2, "Eva"}, {3, "Frank"}};
+    for (auto& [key, value] : employees) { // Key-value unpacking
+        cout << "Map -> Key: " << key << ", Value: " << value << "\n";
+    }
+
+    // -----------------
+    // Example 5: Array
+    // -----------------
+    int arr[3] = {10, 20, 30};
+    auto [a, b, c] = arr;
+    cout << "Array -> a: " << a << ", b: " << b << ", c: " << c << "\n";
+
+    return 0;
+}
+
